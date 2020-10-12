@@ -61,7 +61,6 @@ namespace Line_Production
                 line = file.ReadLine();
                 // Succeded!
                 return line;
-                file.Close();
             }
         }
 
@@ -86,34 +85,48 @@ namespace Line_Production
 
         public static void ReplaceLine(string filePath, int LineNumber, string NewLine)
         {
-            string Databin = "";
-            using (var file = new StreamReader(filePath))
+            try
             {
-                var lines = File.ReadAllLines(filePath);
-                for (int i = 0, loopTo = lines.Length - 1; i <= loopTo; i++)
+                string Databin = "";
+                using (var file = new StreamReader(filePath))
                 {
-                    if (i == LineNumber - 1)
+                    var lines = File.ReadAllLines(filePath);
+                    for (int i = 0, loopTo = lines.Length - 1; i <= loopTo; i++)
                     {
-                        lines[i] = NewLine;
+                        if (i == LineNumber - 1)
+                        {
+                            lines[i] = NewLine;
+                        }
+
+                        Databin = Databin + lines[i] + '\r' + '\n';
                     }
-
-                    Databin = Databin + lines[i] + '\r' + '\n';
                 }
+                File.Delete(filePath);
+                File.WriteAllText(filePath, Databin);
+            }catch(Exception e)
+            {
+                Console.WriteLine(e);
             }
-
-            File.Delete(filePath);
-            File.WriteAllText(filePath, Databin);
+            
         }
 
         public static string ReadAllLine(string filePath)
         {
-            string Databin = "";
-            using (var file = new StreamReader(filePath))
+            try
             {
-                Databin = file.ReadToEnd();
-            }
+                string Databin = "";
+                using (var file = new StreamReader(filePath))
+                {
+                    Databin = file.ReadToEnd();
+                }
 
-            return Databin;
+                return Databin;
+            }catch(Exception e)
+            {
+                MessageBox.Show(e.ToString());
+                return "";
+            }
+            
         }
 
         public static string Findapplication(string namesoft)

@@ -887,268 +887,6 @@ namespace Line_Production
             }
         }
 
-        private void TextSerial_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Repository = New Repository
-            pvsservice = new PVSReference.PVSWebServiceSoapClient();
-            if (e.KeyChar == 13)
-            {
-                // txtSerial.Text = txtSerial.Text.TrimStart.TrimEnd()
-                if (txtSerial.TextLength == IdCodeLenght)
-                {
-                    if (Strings.Mid(txtSerial.Text, ModelRevPosition, ModelRev.Length) == ModelRev)
-                    {
-                        if (PauseProduct == false)
-                        {
-                            if (chkNG.Checked)
-                            {
-                                var content = new StringBuilder();
-                                // Dim sTime As String = DateTime.Now.ToString("yyMMddHHmmss")
-                                string sTime = pvsservice.GetDateTime().ToString("yyMMddHHmmss");
-                                content.AppendLine(string.Join("|", cbbModel.Text, txtSerial.Text, sTime, State.F.ToString(), STATION));
-                                Common.WriteLog(Path.Combine(pathWip, $"{sTime}_{txtSerial.Text.Trim()}.txt"), content);
-                                Common.WriteLog(Path.Combine(pathBackup, "NG", $"{sTime}_{txtSerial.Text.Trim()}.txt"), content);
-
-                            }
-                            /* TODO ERROR: Skipped RegionDirectiveTrivia */
-                            else if (chkLinkWip.Checked)
-                            {
-                                string nameSoft = Common.FindApplication("Board Inspector");
-                                int wipHandle = 0;
-                                wipHandle = NativeWin32.FindWindow(null, nameSoft);
-                                bool temp = Common.IsRunning(nameSoft);
-                                if (!temp)
-                                {
-                                    MessageBox.Show("Chương trình Wip chưa bật", "Message", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                                    return;
-                                }
-                                else
-                                {
-                                    NativeWin32.SetForegroundWindow(wipHandle);
-                                    Thread.Sleep(200);
-                                    SendKeys.SendWait(txtSerial.Text);
-                                    Thread.Sleep(300);
-                                    SendKeys.SendWait("{Enter}");
-                                    Thread.Sleep(200);
-                                    bool IsWipSuccess = false;
-                                    for (int i = 0; i < 10; i++)
-                                    {
-                                        if (pvsservice.GetWorkOrderItem(txtSerial.Text, STATION) != null)
-                                        {
-                                            IsWipSuccess = true;
-                                            break;
-                                        }
-                                        Thread.Sleep(500);
-                                    }
-                                    SendKeys.SendWait("%{TAB}");
-                                    if (!IsWipSuccess)
-                                    {
-                                        txtSerial.SelectAll();
-                                        txtSerial.Focus();
-                                        return;
-                                    }
-                                    
-                                    string FileReport = PathReport + @"\" + ModelCurrent + @"\" + Datecheck + ".csv";
-                                    var content = new StringBuilder();
-                                    if (File.Exists(FileReport) == false)
-                                    {
-                                        content.AppendLine("No,Time,NoPCBA,MAC Box,Id PCBA,User");
-                                    }
-
-                                    content.AppendLine(string.Join(",", CountProduct, DateAndTime.Now.Hour + ":" + DateAndTime.Now.Minute, IDCount, MacCurrent, txtSerial.Text, lblCode.Text));
-                                    Common.WriteLog(FileReport, content);
-                                    KiemTraTrenHondaLock(() =>
-                                    {
-                                        IDCount += 1;
-                                        if (IDCount == PCBBOX)
-                                        {
-                                            if (CheckBox1.Checked)
-                                            {
-                                                TextMacBox.Enabled = true;
-                                                TextMacBox.Focus();
-                                                txtSerial.Enabled = false;
-                                                TextMacBox.Clear();
-                                            }
-                                            else
-                                            {
-                                                txtSerial.Focus();
-                                            }
-
-                                            IDCount = 0;
-                                            IDCount_box += 1;
-                                            Box_curent = "";
-                                        }
-
-                                        LabelPCBA.Text = IDCount.ToString();
-                                        LabelSoThung.Text = IDCount_box.ToString();
-                                        IncreaseProduct();
-                                        if (ConfirmModel & IDCount != 0)
-                                        {
-                                            txtConfirm.Enabled = true;
-                                            txtConfirm.SelectAll();
-                                            txtConfirm.Focus();
-                                            txtSerial.Enabled = false;
-                                        }
-
-                                    }, () =>
-                                    {
-                                        txtSerial.Focus();
-                                    });
-
-                                }
-                            }
-                            else if (useWip == false)
-                            {
-                                string FileReport = PathReport + @"\" + ModelCurrent + @"\" + Datecheck + ".csv";
-
-                                KiemTraTrenHondaLock(() =>
-                                {
-                                    /* TODO ERROR: Skipped RegionDirectiveTrivia */
-                                    var content = new StringBuilder();
-                                    if (File.Exists(FileReport) == false)
-                                    {
-                                        content.AppendLine("No,Time,NoPCBA,MAC Box,Id PCBA,User");
-                                    }
-
-                                    content.AppendLine(string.Join(",", CountProduct, DateAndTime.Now.Hour + ":" + DateAndTime.Now.Minute, IDCount, MacCurrent, txtSerial.Text, lblCode.Text));
-                                    Common.WriteLog(FileReport, content);
-                                    /* TODO ERROR: Skipped EndRegionDirectiveTrivia */
-                                    IDCount += 1;
-                                    if (IDCount == PCBBOX)
-                                    {
-                                        if (CheckBox1.Checked)
-                                        {
-                                            TextMacBox.Enabled = true;
-                                            TextMacBox.Focus();
-                                            txtSerial.Enabled = false;
-                                            TextMacBox.Clear();
-                                        }
-                                        else
-                                        {
-                                            txtSerial.Focus();
-                                        }
-
-                                        IDCount = 0;
-                                        IDCount_box += 1;
-                                        Box_curent = "";
-                                    }
-
-                                    LabelPCBA.Text = IDCount.ToString();
-                                    LabelSoThung.Text = IDCount_box.ToString();
-                                    IncreaseProduct();
-                                    if (ConfirmModel & IDCount != 0)
-                                    {
-                                        txtConfirm.Enabled = true;
-                                        txtConfirm.SelectAll();
-                                        txtConfirm.Focus();
-                                        txtSerial.Enabled = false;
-                                    }
-                                }, () => { });
-
-                                //}
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    string FileReport = PathReport + @"\" + ModelCurrent + @"\" + Datecheck + ".csv";
-
-                                    /* TODO ERROR: Skipped RegionDirectiveTrivia */
-                                    var _content = new StringBuilder();
-                                    if (File.Exists(FileReport) == false)
-                                    {
-                                        _content.AppendLine("No,Time,NoPCBA,MAC Box,Id PCBA,User");
-                                    }
-
-                                    _content.AppendLine(string.Join(",", CountProduct, DateAndTime.Now.Hour + ":" + DateAndTime.Now.Minute, IDCount, MacCurrent, txtSerial.Text, lblCode.Text));
-                                    Common.WriteLog(FileReport, _content);
-
-                                    var contentWip = new StringBuilder();
-                                    string sTime = pvsservice.GetDateTime().ToString("yyMMddHHmmss");
-                                    if (Directory.Exists(PathReport + @"\" + ModelCurrent) == false)
-                                        Directory.CreateDirectory(PathReport + @"\" + ModelCurrent);
-                                    contentWip.AppendLine(string.Join("|", cbbModel.Text, txtSerial.Text, sTime, State.P.ToString(), STATION));
-                                    Common.WriteLog(Path.Combine(pathWip, $"{sTime}_{txtSerial.Text.Trim()}.txt"), contentWip);
-                                    Common.WriteLog(Path.Combine(pathBackup, "OK", $"{sTime}_{txtSerial.Text.Trim()}.txt"), contentWip);
-
-                                    KiemTraTrenHondaLock(() =>
-                                    {
-                                        /* TODO ERROR: Skipped EndRegionDirectiveTrivia */
-                                        IDCount += 1;
-                                        if (IDCount == PCBBOX)
-                                        {
-                                            if (CheckBox1.Checked)
-                                            {
-                                                TextMacBox.Enabled = true;
-                                                TextMacBox.Focus();
-                                                txtSerial.Enabled = false;
-                                                TextMacBox.Clear();
-                                            }
-                                            else
-                                            {
-                                                txtSerial.Focus();
-                                            }
-
-                                            IDCount = 0;
-                                            IDCount_box += 1;
-                                            Box_curent = "";
-                                        }
-
-                                        LabelPCBA.Text = IDCount.ToString();
-                                        LabelSoThung.Text = IDCount_box.ToString();
-                                        IncreaseProduct();
-                                        if (ConfirmModel & IDCount != 0)
-                                        {
-                                            txtConfirm.Enabled = true;
-                                            txtConfirm.SelectAll();
-                                            txtConfirm.Focus();
-                                            txtSerial.Enabled = false;
-                                        }
-
-                                    }, () => { });
-
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show("Kết nối đến server thất bại !", "Message", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                                    return;
-                                }
-                                /* TODO ERROR: Skipped EndRegionDirectiveTrivia */
-                            }
-
-                        }
-                        else
-                        {
-                            NG_FORM NG_FORM = new NG_FORM();
-                            NG_FORM.Lb_inform_NG.Text = "Đang thời gian nghỉ!";
-                            NG_FORM.ControlBox = true;
-                            NG_FORM.GroupBox3.Visible = false;
-                            NG_FORM.ShowDialog();
-                        }
-                    }
-                    else
-                    {
-                        NG_FORM NG_FORM = new NG_FORM();
-                        NG_FORM.Lb_inform_NG.Text = txtSerial.Text + " sai ma quy dinh model: " + ModelRev;
-                        NG_FORM.GroupBox3.Visible = false;
-                        // NG_FORM.ControlBox = False
-                        // NG_FORM.ShowInTaskbar = False
-                        NG_FORM.ShowDialog();
-                    }
-                }
-                else
-                {
-                    NG_FORM NG_FORM = new NG_FORM();
-                    NG_FORM.Lb_inform_NG.Text = txtSerial.Text + " khong dung do dai label la:" + IdCodeLenght;
-                    // NG_FORM.ControlBox = False
-                    // NG_FORM.ShowInTaskbar = False
-                    NG_FORM.GroupBox3.Visible = false;
-                    NG_FORM.ShowDialog();
-                }
-
-                txtSerial.SelectAll();
-            }
-        }
 
         private void KiemTraTrenHondaLock(Action ChuaTonTai, Action DaTonTai)
         {
@@ -1415,6 +1153,7 @@ namespace Line_Production
                 {
                     if (index % 2 != 0)
                     {
+                        var time = TimeLine[index];
                         if (sumtime >= TimeLine[index].Hour * 100 + TimeLine[index].Minute & sumtime <= TimeLine[index + 1].Hour * 100 + TimeLine[index + 1].Minute)
                         {
                             bien_dem = bien_dem + 1;
@@ -1476,6 +1215,224 @@ namespace Line_Production
                 TextMacBox.Enabled = false;
                 txtSerial.Enabled = true;
                 txtSerial.Focus();
+            }
+        }
+
+        private void txtSerial_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            // Repository = New Repository
+            pvsservice = new PVSReference.PVSWebServiceSoapClient();
+            if (e.KeyCode == Keys.Enter)
+            {
+                // txtSerial.Text = txtSerial.Text.TrimStart.TrimEnd()
+                if (Strings.Mid(txtSerial.Text, ModelRevPosition, ModelRev.Length) == ModelRev)
+                {
+                    if (PauseProduct == false)
+                    {
+                        if (chkNG.Checked)
+                        {
+                            var content = new StringBuilder();
+                            // Dim sTime As String = DateTime.Now.ToString("yyMMddHHmmss")
+                            string sTime = pvsservice.GetDateTime().ToString("yyMMddHHmmss");
+                            content.AppendLine(string.Join("|", cbbModel.Text, txtSerial.Text, sTime, State.F.ToString(), STATION));
+                            Common.WriteLog(Path.Combine(pathWip, $"{sTime}_{txtSerial.Text.Trim()}.txt"), content);
+                            Common.WriteLog(Path.Combine(pathBackup, "NG", $"{sTime}_{txtSerial.Text.Trim()}.txt"), content);
+
+                        }
+                        /* TODO ERROR: Skipped RegionDirectiveTrivia */
+                        else if (chkLinkWip.Checked)
+                        {
+                            string nameSoft = Common.FindApplication("Board Inspector");
+                            int wipHandle = 0;
+                            wipHandle = NativeWin32.FindWindow(null, nameSoft);
+                            bool temp = Common.IsRunning(nameSoft);
+                            if (!temp)
+                            {
+                                MessageBox.Show("Chương trình Wip chưa bật", "Message", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                return;
+                            }
+                            else
+                            {
+                                NativeWin32.SetForegroundWindow(wipHandle);
+                                Thread.Sleep(200);
+                                SendKeys.SendWait(txtSerial.Text);
+                                Thread.Sleep(300);
+                                SendKeys.SendWait("{Enter}");
+                                Thread.Sleep(200);
+                                bool IsWipSuccess = false;
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    if (pvsservice.GetWorkOrderItem(txtSerial.Text, STATION) != null)
+                                    {
+                                        IsWipSuccess = true;
+                                        break;
+                                    }
+                                    Thread.Sleep(500);
+                                }
+                                SendKeys.SendWait("%{TAB}");
+                                if (!IsWipSuccess)
+                                {
+                                    txtSerial.SelectAll();
+                                    txtSerial.Focus();
+                                    return;
+                                }
+
+                                KiemTraTrenHondaLock(() =>
+                                {
+                                    IDCount += 1;
+                                    if (IDCount == PCBBOX)
+                                    {
+                                        if (CheckBox1.Checked)
+                                        {
+                                            TextMacBox.Enabled = true;
+                                            TextMacBox.Focus();
+                                            txtSerial.Enabled = false;
+                                            TextMacBox.Clear();
+                                        }
+                                        else
+                                        {
+                                            txtSerial.Focus();
+                                        }
+
+                                        IDCount = 0;
+                                        IDCount_box += 1;
+                                        Box_curent = "";
+                                    }
+
+                                    LabelPCBA.Text = IDCount.ToString();
+                                    LabelSoThung.Text = IDCount_box.ToString();
+                                    IncreaseProduct();
+                                    if (ConfirmModel & IDCount != 0)
+                                    {
+                                        txtConfirm.Enabled = true;
+                                        txtConfirm.SelectAll();
+                                        txtConfirm.Focus();
+                                        txtSerial.Enabled = false;
+                                    }
+
+                                }, () =>
+                                {
+                                    txtSerial.Focus();
+                                });
+
+                            }
+                        }
+                        else if (useWip == false)
+                        {
+
+                            KiemTraTrenHondaLock(() =>
+                            {
+                                IDCount += 1;
+                                if (IDCount == PCBBOX)
+                                {
+                                    if (CheckBox1.Checked)
+                                    {
+                                        TextMacBox.Enabled = true;
+                                        TextMacBox.Focus();
+                                        txtSerial.Enabled = false;
+                                        TextMacBox.Clear();
+                                    }
+                                    else
+                                    {
+                                        txtSerial.Focus();
+                                    }
+
+                                    IDCount = 0;
+                                    IDCount_box += 1;
+                                    Box_curent = "";
+                                }
+
+                                LabelPCBA.Text = IDCount.ToString();
+                                LabelSoThung.Text = IDCount_box.ToString();
+                                IncreaseProduct();
+                                if (ConfirmModel & IDCount != 0)
+                                {
+                                    txtConfirm.Enabled = true;
+                                    txtConfirm.SelectAll();
+                                    txtConfirm.Focus();
+                                    txtSerial.Enabled = false;
+                                }
+                            }, () => { });
+
+                            //}
+                        }
+                        else
+                        {
+                            try
+                            {
+                                var contentWip = new StringBuilder();
+                                string sTime = pvsservice.GetDateTime().ToString("yyMMddHHmmss");
+                                if (Directory.Exists(PathReport + @"\" + ModelCurrent) == false)
+                                    Directory.CreateDirectory(PathReport + @"\" + ModelCurrent);
+                                contentWip.AppendLine(string.Join("|", cbbModel.Text, txtSerial.Text, sTime, State.P.ToString(), STATION));
+                                Common.WriteLog(Path.Combine(pathWip, $"{sTime}_{txtSerial.Text.Trim()}.txt"), contentWip);
+                                Common.WriteLog(Path.Combine(pathBackup, "OK", $"{sTime}_{txtSerial.Text.Trim()}.txt"), contentWip);
+
+                                KiemTraTrenHondaLock(() =>
+                                {
+                                    /* TODO ERROR: Skipped EndRegionDirectiveTrivia */
+                                    IDCount += 1;
+                                    if (IDCount == PCBBOX)
+                                    {
+                                        if (CheckBox1.Checked)
+                                        {
+                                            TextMacBox.Enabled = true;
+                                            TextMacBox.Focus();
+                                            txtSerial.Enabled = false;
+                                            TextMacBox.Clear();
+                                        }
+                                        else
+                                        {
+                                            txtSerial.Focus();
+                                        }
+
+                                        IDCount = 0;
+                                        IDCount_box += 1;
+                                        Box_curent = "";
+                                    }
+
+                                    LabelPCBA.Text = IDCount.ToString();
+                                    LabelSoThung.Text = IDCount_box.ToString();
+                                    IncreaseProduct();
+                                    if (ConfirmModel & IDCount != 0)
+                                    {
+                                        txtConfirm.Enabled = true;
+                                        txtConfirm.SelectAll();
+                                        txtConfirm.Focus();
+                                        txtSerial.Enabled = false;
+                                    }
+
+                                }, () => { });
+
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Kết nối đến server thất bại !", "Message", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                return;
+                            }
+                            /* TODO ERROR: Skipped EndRegionDirectiveTrivia */
+                        }
+
+                    }
+                    else
+                    {
+                        NG_FORM NG_FORM = new NG_FORM();
+                        NG_FORM.Lb_inform_NG.Text = "Đang thời gian nghỉ!";
+                        NG_FORM.ControlBox = true;
+                        NG_FORM.GroupBox3.Visible = false;
+                        NG_FORM.ShowDialog();
+                    }
+                }
+                else
+                {
+                    NG_FORM NG_FORM = new NG_FORM();
+                    NG_FORM.Lb_inform_NG.Text = txtSerial.Text + " sai ma quy dinh model: " + ModelRev;
+                    NG_FORM.GroupBox3.Visible = false;
+                    // NG_FORM.ControlBox = False
+                    // NG_FORM.ShowInTaskbar = False
+                    NG_FORM.ShowDialog();
+                }
+                txtSerial.SelectAll();
             }
         }
     }
