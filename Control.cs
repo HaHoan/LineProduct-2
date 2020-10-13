@@ -1249,82 +1249,90 @@ namespace Line_Production
                         /* TODO ERROR: Skipped RegionDirectiveTrivia */
                         else if (chkLinkWip.Checked)
                         {
-                            string nameSoft = Common.FindApplication("Board Inspector");
-                            int wipHandle = 0;
-                            wipHandle = NativeWin32.FindWindow(null, nameSoft);
-                            bool temp = Common.IsRunning(nameSoft);
-                            if (!temp)
+                            try
                             {
-                                MessageBox.Show("Chương trình Wip chưa bật", "Message", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                                return;
-                            }
-                            else
-                            {
-                                NativeWin32.SetForegroundWindow(wipHandle);
-                                Thread.Sleep(200);
-                                //SendKeys.SendWait(txtSerial.Text);
-                                Clipboard.SetText(txtSerial.Text, TextDataFormat.Text);
-                                SendKeys.Send("^V");
-                                Thread.Sleep(300);
-                                SendKeys.SendWait("{Enter}");
-                                Thread.Sleep(200);
-                                bool IsWipSuccess = false;
-                                for (int i = 0; i < 10; i++)
+                                string nameSoft = Common.FindApplication("Board Inspector");
+                                int wipHandle = 0;
+                                wipHandle = NativeWin32.FindWindow(null, nameSoft);
+                                bool temp = Common.IsRunning(nameSoft);
+                                if (!temp)
                                 {
-                                    if (pvsservice.GetWorkOrderItem(txtSerial.Text, STATION) != null)
-                                    {
-                                        IsWipSuccess = true;
-                                        break;
-                                    }
-                                    Thread.Sleep(100);
-                                }
-                                SendKeys.SendWait("%{TAB}");
-                                if (!IsWipSuccess)
-                                {
-                                    txtSerial.SelectAll();
-                                    txtSerial.Focus();
+                                    MessageBox.Show("Chương trình Wip chưa bật", "Message", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                     return;
                                 }
-
-                                KiemTraTrenHondaLock(() =>
+                                else
                                 {
-                                    IDCount += 1;
-                                    if (IDCount == PCBBOX)
+                                    NativeWin32.SetForegroundWindow(wipHandle);
+                                    Thread.Sleep(200);
+                                    //SendKeys.SendWait(txtSerial.Text);
+                                    Clipboard.SetText(txtSerial.Text, TextDataFormat.Text);
+                                    SendKeys.Send("^V");
+                                    Thread.Sleep(300);
+                                    SendKeys.SendWait("{Enter}");
+                                    Thread.Sleep(200);
+                                    bool IsWipSuccess = true;
+                                    for (int i = 0; i < 10; i++)
                                     {
-                                        if (CheckBox1.Checked)
+                                        if (pvsservice.GetWorkOrderItem(txtSerial.Text, STATION) != null)
                                         {
-                                            TextMacBox.Enabled = true;
-                                            TextMacBox.Focus();
+                                            IsWipSuccess = true;
+                                            break;
+                                        }
+                                        Thread.Sleep(100);
+                                    }
+                                    SendKeys.SendWait("%{TAB}");
+                                    if (!IsWipSuccess)
+                                    {
+                                        txtSerial.SelectAll();
+                                        txtSerial.Focus();
+                                        return;
+                                    }
+
+                                    KiemTraTrenHondaLock(() =>
+                                    {
+                                        IDCount += 1;
+                                        if (IDCount == PCBBOX)
+                                        {
+                                            if (CheckBox1.Checked)
+                                            {
+                                                TextMacBox.Enabled = true;
+                                                TextMacBox.Focus();
+                                                txtSerial.Enabled = false;
+                                                TextMacBox.Clear();
+                                            }
+                                            else
+                                            {
+                                                txtSerial.Focus();
+                                            }
+
+                                            IDCount = 0;
+                                            IDCount_box += 1;
+                                            Box_curent = "";
+                                        }
+
+                                        LabelPCBA.Text = IDCount.ToString();
+                                        LabelSoThung.Text = IDCount_box.ToString();
+                                        IncreaseProduct();
+                                        if (ConfirmModel & IDCount != 0)
+                                        {
+                                            txtConfirm.Enabled = true;
+                                            txtConfirm.SelectAll();
+                                            txtConfirm.Focus();
                                             txtSerial.Enabled = false;
-                                            TextMacBox.Clear();
-                                        }
-                                        else
-                                        {
-                                            txtSerial.Focus();
                                         }
 
-                                        IDCount = 0;
-                                        IDCount_box += 1;
-                                        Box_curent = "";
-                                    }
-
-                                    LabelPCBA.Text = IDCount.ToString();
-                                    LabelSoThung.Text = IDCount_box.ToString();
-                                    IncreaseProduct();
-                                    if (ConfirmModel & IDCount != 0)
+                                    }, () =>
                                     {
-                                        txtConfirm.Enabled = true;
-                                        txtConfirm.SelectAll();
-                                        txtConfirm.Focus();
-                                        txtSerial.Enabled = false;
-                                    }
+                                        txtSerial.Focus();
+                                    });
 
-                                }, () =>
-                                {
-                                    txtSerial.Focus();
-                                });
-
+                                }
                             }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Error: " + ex.Message.ToString());
+                            }
+
                         }
                         else if (useWip == false)
                         {
