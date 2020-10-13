@@ -54,7 +54,7 @@ namespace Line_Production
                     MessageBox.Show("Sai tên đăng nhập hoặc mật khẩu!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Kết nối đến server thất bại !", "Message", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }

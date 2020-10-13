@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,6 +14,7 @@ namespace Line_Production
 {
     public partial class frmConfig : Form
     {
+        public Action updateAfterSetting;
         public frmConfig()
         {
             InitializeComponent();
@@ -21,21 +23,23 @@ namespace Line_Production
 
         private void btnSaveChanged_Click(object sender, EventArgs e)
         {
-            Common.WriteRegistry(Control.PathConfig, "id", txtId.Text);
-            Common.WriteRegistry(Control.PathConfig, "useWip", chkWip.Checked.ToString());
-            Common.WriteRegistry(Control.PathConfig, "pathWip", txtLog.Text);
-            Common.WriteRegistry(Control.PathConfig, "station", txtStation.Text.Trim());
-            Common.WriteRegistry(Control.PathConfig, "COM", cbbCOM.Text.Trim());
+            Common.WriteRegistry(Control.PathConfig, RegistryKeys.id, txtId.Text);
+            Common.WriteRegistry(Control.PathConfig, RegistryKeys.useWip, chkWip.Checked.ToString());
+            Common.WriteRegistry(Control.PathConfig, RegistryKeys.pathWip, txtLog.Text);
+            Common.WriteRegistry(Control.PathConfig, RegistryKeys.station, txtStation.Text.Trim());
+            Common.WriteRegistry(Control.PathConfig, RegistryKeys.COM, cbbCOM.Text.Trim());
+            Common.WriteRegistry(Control.PathConfig, RegistryKeys.LinkWip, chkLinkWip.Checked.ToString());
             var confirm = MessageBox.Show("Save success!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             if (confirm == DialogResult.OK)
             {
+                updateAfterSetting();
                 Close();
             }
         }
 
         private void frmConfig_Load(object sender, EventArgs e)
         {
-            txtId.Text = Common.GetValueRegistryKey(Control.PathConfig, "id");
+            txtId.Text = Common.GetValueRegistryKey(Control.PathConfig, RegistryKeys.id);
             try
             {
                 bool chkWipValue = bool.Parse(Common.GetValueRegistryKey(Control.PathConfig, "useWip"));
@@ -59,9 +63,9 @@ namespace Line_Production
             }
         }
 
-        private void btnTestComConnection_Click(object sender, EventArgs e)
+        private void btnTestCOM_Click(object sender, EventArgs e)
         {
-            
+            Common.SendToComport("test", result => { MessageBox.Show("Test COM connection : " + result); });
         }
     }
 }

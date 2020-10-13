@@ -48,6 +48,8 @@ namespace Line_Production
             this.btnSaveChanged = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.cbbCOM = new System.Windows.Forms.ComboBox();
+            this.btnTestCOM = new System.Windows.Forms.Button();
+            this.chkLinkWip = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // chkWip
@@ -55,7 +57,7 @@ namespace Line_Production
             this.chkWip.AutoSize = true;
             this.chkWip.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkWip.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.chkWip.Location = new System.Drawing.Point(87, 174);
+            this.chkWip.Location = new System.Drawing.Point(183, 174);
             this.chkWip.Name = "chkWip";
             this.chkWip.Size = new System.Drawing.Size(109, 17);
             this.chkWip.TabIndex = 2;
@@ -158,12 +160,36 @@ namespace Line_Production
             this.cbbCOM.Size = new System.Drawing.Size(121, 21);
             this.cbbCOM.TabIndex = 38;
             // 
+            // btnTestCOM
+            // 
+            this.btnTestCOM.Location = new System.Drawing.Point(217, 132);
+            this.btnTestCOM.Name = "btnTestCOM";
+            this.btnTestCOM.Size = new System.Drawing.Size(75, 23);
+            this.btnTestCOM.TabIndex = 39;
+            this.btnTestCOM.Text = "Test COM";
+            this.btnTestCOM.UseVisualStyleBackColor = true;
+            this.btnTestCOM.Click += new System.EventHandler(this.btnTestCOM_Click);
+            // 
+            // chkLinkWip
+            // 
+            this.chkLinkWip.AutoSize = true;
+            this.chkLinkWip.Checked = true;
+            this.chkLinkWip.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkLinkWip.Location = new System.Drawing.Point(87, 174);
+            this.chkLinkWip.Name = "chkLinkWip";
+            this.chkLinkWip.Size = new System.Drawing.Size(70, 17);
+            this.chkLinkWip.TabIndex = 40;
+            this.chkLinkWip.Text = "Link WIP";
+            this.chkLinkWip.UseVisualStyleBackColor = true;
+            // 
             // frmConfig
             // 
             this.AcceptButton = this.btnSaveChanged;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(350, 308);
+            this.Controls.Add(this.chkLinkWip);
+            this.Controls.Add(this.btnTestCOM);
             this.Controls.Add(this.cbbCOM);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtId);
@@ -198,5 +224,7 @@ namespace Line_Production
         internal Label Label5;
         private Label label4;
         private ComboBox cbbCOM;
+        private Button btnTestCOM;
+        internal CheckBox chkLinkWip;
     }
 }
