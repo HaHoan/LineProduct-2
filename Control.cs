@@ -1270,7 +1270,7 @@ namespace Line_Production
                                     Thread.Sleep(300);
                                     SendKeys.SendWait("{Enter}");
                                     Thread.Sleep(200);
-                                    bool IsWipSuccess = true;
+                                    bool IsWipSuccess = false;
                                     for (int i = 0; i < 10; i++)
                                     {
                                         if (pvsservice.GetWorkOrderItem(txtSerial.Text, STATION) != null)
