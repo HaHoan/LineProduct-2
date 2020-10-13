@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 
 namespace Line_Production.Database
 {
-    /*
-     * db : 172.28.10.9 / UMC3000 / BCLBFLM 
-     */
+   
     public class HondaLocks
     {
         public object Insert(object o)

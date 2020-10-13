@@ -8,7 +8,7 @@ namespace Line_Production
 {
     public static class Constants
     {
-        public static string PathConfig = @"SOFTWARE\CANON_SUPPORT\Configs";
+        //public static string PathConfig = @"SOFTWARE\LINEPRODUCTION\Configs";
         public static string BaudRate = "9600";
         public static string DataBits = "8";
         public static string Parity = "None";

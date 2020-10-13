@@ -29,6 +29,7 @@ namespace Line_Production
         private int bien_dem = 0;
         private bool useWip = true;
         private int _index = 0;
+        private int _counter = 0;
 
         public void FormatNgayCasx()
         {
@@ -153,7 +154,6 @@ namespace Line_Production
                 CountProductPerHour[index] = 0;
             NoPeople = 0;
             ModelCurrent = "";
-            btDTle.Visible = false;
             Shape2.Visible = false;
             Shape1.Visible = false;
             Shape3.Visible = false;
@@ -506,7 +506,6 @@ namespace Line_Production
             LabelShapeOnline.Visible = true;
             LabelShapeOffLine.Visible = false;
             LabelShapeError.Visible = false;
-            btDTle.Visible = false;
             Shape1.Visible = false;
             Shape2.Visible = false;
             Shape3.Visible = false;
@@ -574,7 +573,7 @@ namespace Line_Production
         {
             var ett = new LineProductWebServiceReference.tbl_Product_RealtimeEntity()
             {
-                CUSTOMER = "CANON",
+                CUSTOMER = "",
                 LINE_NO = IdLine,
                 MODEL = cbbModel.Text,
                 QTY_PLAN = ProductPlan,
@@ -680,6 +679,7 @@ namespace Line_Production
         {
             LabelTimeDate.Text = DateAndTime.Now.ToString("HH:mm:ss  dd/MM/yyyy");
             lblDate.Text = DateAndTime.Now.ToLongTimeString();
+            _counter++;
             // TimerPress.Enabled = True
             if (BtStart.Text != "Bắt đầu")
             {
@@ -801,7 +801,7 @@ namespace Line_Production
                 };
                 var entities = new LineProductWebServiceReference.tbl_Product_RealtimeEntity()
                 {
-                    CUSTOMER = "CANON",
+                    CUSTOMER = "",
                     LINE_NO = IdLine,
                     MODEL = cbbModel.Text,
                     QTY_PLAN = ProductPlan,
@@ -815,7 +815,11 @@ namespace Line_Production
                     STATUS = "RUNNING"
                 };
                 // Repository.UpdatateData(entities)
-                _lineproduct_service.UpdateRealtime(entities);
+                if (_counter >= 60)
+                {
+                    _lineproduct_service.UpdateRealtime(entities);
+                    _counter = 0;
+                }
                 if (ComControlPort.IsOpen == true)
                     ComControlPort.WriteLine(ArraySend);
                 // RecordDatabase()
@@ -916,6 +920,9 @@ namespace Line_Production
             }
         }
 
+        /*
+        * db : 172.28.10.9 / UMC3000 / BCLBFLM 
+        */
         private int LaySoThung(string mathung)
         {
             var bc = usapservice.GetByBcNo(TextMacBox.Text.ToString());
@@ -1114,7 +1121,7 @@ namespace Line_Production
             // useWip = My.Settings.useWip
             useWip = bool.Parse(Common.GetValueRegistryKey(PathConfig, "useWip"));
             pathWip = Common.GetValueRegistryKey(PathConfig, "pathWip");
-            txtLine.Text = Common.GetValueRegistryKey(PathConfig, "nameLine");
+            txtLine.Text = Common.GetValueRegistryKey(PathConfig, "id");
             Init();
             // dirWipMachine = My.Settings.pathWip
         }
@@ -1255,7 +1262,9 @@ namespace Line_Production
                             {
                                 NativeWin32.SetForegroundWindow(wipHandle);
                                 Thread.Sleep(200);
-                                SendKeys.SendWait(txtSerial.Text);
+                                //SendKeys.SendWait(txtSerial.Text);
+                                Clipboard.SetText(txtSerial.Text, TextDataFormat.Text);
+                                SendKeys.Send("^V");
                                 Thread.Sleep(300);
                                 SendKeys.SendWait("{Enter}");
                                 Thread.Sleep(200);
@@ -1267,7 +1276,7 @@ namespace Line_Production
                                         IsWipSuccess = true;
                                         break;
                                     }
-                                    Thread.Sleep(500);
+                                    Thread.Sleep(100);
                                 }
                                 SendKeys.SendWait("%{TAB}");
                                 if (!IsWipSuccess)
@@ -1433,6 +1442,14 @@ namespace Line_Production
                     NG_FORM.ShowDialog();
                 }
                 txtSerial.SelectAll();
+            }
+        }
+
+        private void Control_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (ComControlPort.IsOpen)
+            {
+                ComControlPort.Close();
             }
         }
     }

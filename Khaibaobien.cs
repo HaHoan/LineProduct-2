@@ -19,7 +19,7 @@ namespace Line_Production
         // Public PathSetupPath As String = PathSetup & "\Setup Path.ini"
         // Public PathStatus As String = ""
         public static string PathReport = PathApplication + @"\Report";
-        public static string PathConfig = @"SOFTWARE\CANON_SUPPORT\Configs";
+        public static string PathConfig = @"SOFTWARE\LINEPRODUCTION\Configs";
         // Public dirWip As String = ""
         public static string pathBackup = string.Empty;
         public static string pathWip = string.Empty;
@@ -101,45 +101,54 @@ namespace Line_Production
 
         public bool CheckComControlPort()
         {
-            string com = Common.GetValueRegistryKey(Constants.PathConfig, "COM");
+            string com = Common.GetValueRegistryKey(PathConfig, "COM");
             if (com == null || SerialPort.GetPortNames() == null || SerialPort.GetPortNames().Length == 0)
             {
                 MessageBox.Show("Chưa kết nối cổng COM");
                 return false;
             }
             ComControl = com;
-            string baudRate = Common.GetValueRegistryKey(Constants.PathConfig, "BaudRate");
+            string baudRate = Common.GetValueRegistryKey(PathConfig, "BaudRate");
             if (baudRate == null)
             {
                 baudRate = Constants.BaudRate;
-                Common.WriteRegistry(Constants.PathConfig, "BaudRate", baudRate);
+                Common.WriteRegistry(PathConfig, "BaudRate", baudRate);
             }
             SetBaudRateComControl = (int)Conversion.Val(baudRate);
-            string dataBits = Common.GetValueRegistryKey(Constants.PathConfig, "DataBits");
+            string dataBits = Common.GetValueRegistryKey(PathConfig, "DataBits");
             if (dataBits == null)
             {
                 dataBits = Constants.DataBits;
-                Common.WriteRegistry(Constants.PathConfig, "DataBits", dataBits);
+                Common.WriteRegistry(PathConfig, "DataBits", dataBits);
             }
             SetDataBitsComControl = (int)Conversion.Val(dataBits); //8
-            string Parity = Common.GetValueRegistryKey(Constants.PathConfig, "Parity");
-            if (Parity == null)
+            string parity = Common.GetValueRegistryKey(PathConfig, "Parity");
+            if (parity == null)
             {
-                Parity = Constants.Parity;
-                Common.WriteRegistry(Constants.PathConfig, "Parity", dataBits);
+                parity = Constants.Parity;
+                Common.WriteRegistry(PathConfig, "Parity", dataBits);
             }
-            SetParityComControl = Parity; // None
-            string StopBits = Common.GetValueRegistryKey(Constants.PathConfig, "StopBits");
-            if (StopBits == null)
+            SetParityComControl = parity; // None
+            string stopBits = Common.GetValueRegistryKey(PathConfig, "StopBits");
+            if (stopBits == null)
             {
-                StopBits = Constants.StopBits;
-                Common.WriteRegistry(Constants.PathConfig, "StopBits", StopBits);
+                stopBits = Constants.StopBits;
+                Common.WriteRegistry(PathConfig, "StopBits", stopBits);
             }
-            SetStopBitsComControl = (int)Conversion.Val(StopBits); //1
-
+            SetStopBitsComControl = (int)Conversion.Val(stopBits); //1
+            {
+                var withBlock = ComControlPort;
+                withBlock.PortName = ComControl;
+                withBlock.BaudRate = SetBaudRateComControl;
+                withBlock.DataBits = SetDataBitsComControl;
+                withBlock.Parity = Parity.None;
+                withBlock.StopBits = StopBits.One;
+                withBlock.Handshake = Handshake.None;
+                withBlock.ReceivedBytesThreshold = 1;
+            }
             try
             {
-
+                
                 if (ComControlPort.IsOpen == true)
                 {
                     return false;
@@ -179,7 +188,7 @@ namespace Line_Production
                     Directory.CreateDirectory(PathReport);
                 if (Directory.Exists(pathConfirm) == false)
                     Directory.CreateDirectory(pathConfirm);
-                txtLine.Text = Common.GetValueRegistryKey(PathConfig, "nameLine");
+                txtLine.Text = Common.GetValueRegistryKey(PathConfig, "id");
             }
             catch (Exception e)
             {

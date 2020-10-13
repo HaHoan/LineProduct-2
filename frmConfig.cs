@@ -21,12 +21,11 @@ namespace Line_Production
 
         private void btnSaveChanged_Click(object sender, EventArgs e)
         {
-            Common.WriteRegistry(Constants.PathConfig, "id", txtId.Text);
-            Common.WriteRegistry(Constants.PathConfig, "nameLine", txtLine.Text);
-            Common.WriteRegistry(Constants.PathConfig, "useWip", chkWip.Checked.ToString());
-            Common.WriteRegistry(Constants.PathConfig, "pathWip", txtLog.Text);
-            Common.WriteRegistry(Constants.PathConfig, "station", txtStation.Text.Trim());
-            Common.WriteRegistry(Constants.PathConfig, "COM", cbbCOM.Text.Trim());
+            Common.WriteRegistry(Control.PathConfig, "id", txtId.Text);
+            Common.WriteRegistry(Control.PathConfig, "useWip", chkWip.Checked.ToString());
+            Common.WriteRegistry(Control.PathConfig, "pathWip", txtLog.Text);
+            Common.WriteRegistry(Control.PathConfig, "station", txtStation.Text.Trim());
+            Common.WriteRegistry(Control.PathConfig, "COM", cbbCOM.Text.Trim());
             var confirm = MessageBox.Show("Save success!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             if (confirm == DialogResult.OK)
             {
@@ -36,19 +35,33 @@ namespace Line_Production
 
         private void frmConfig_Load(object sender, EventArgs e)
         {
-            txtId.Text = Common.GetValueRegistryKey(Constants.PathConfig, "id");
+            txtId.Text = Common.GetValueRegistryKey(Control.PathConfig, "id");
             try
             {
-                bool chkWipValue = bool.Parse(Common.GetValueRegistryKey(Constants.PathConfig, "useWip"));
+                bool chkWipValue = bool.Parse(Common.GetValueRegistryKey(Control.PathConfig, "useWip"));
                 chkWip.Checked = chkWipValue;
-            } catch { }
-            
-            txtLog.Text = Common.GetValueRegistryKey(Constants.PathConfig, "pathWip");
-            txtLine.Text = Common.GetValueRegistryKey(Constants.PathConfig, "nameLine");
-            txtStation.Text = Common.GetValueRegistryKey(Constants.PathConfig, "station");
-            cbbCOM.Text = Common.GetValueRegistryKey(Constants.PathConfig, "COM");
+            }
+            catch { }
+
+            txtLog.Text = Common.GetValueRegistryKey(Control.PathConfig, "pathWip");
+            txtStation.Text = Common.GetValueRegistryKey(Control.PathConfig, "station");
+            cbbCOM.Text = Common.GetValueRegistryKey(Control.PathConfig, "COM");
 
         }
 
+        private void btnBrower_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog choofdlog = new FolderBrowserDialog();
+
+            if (choofdlog.ShowDialog() == DialogResult.OK)
+            {
+                txtLog.Text = choofdlog.SelectedPath;
+            }
+        }
+
+        private void btnTestComConnection_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }
