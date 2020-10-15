@@ -12,15 +12,11 @@ namespace Line_Production
         public static string PathApplication = Application.StartupPath;
         public static string PathSetup = PathApplication + @"\Setup";
         public static string PathPassrate = PathApplication + @"\Passrate";
-        public static string PathSetupComport = PathSetup + @"\Setting Comport.ini";
         public static string PathModelList = PathSetup + @"\List model.ini";
         public static string PathPassList = PathSetup + @"\SetupListPass.ini";
         public static bool waitWipConfirm = true;
-        // Public PathSetupPath As String = PathSetup & "\Setup Path.ini"
-        // Public PathStatus As String = ""
         public static string PathReport = PathApplication + @"\Report";
         public static string PathConfig = @"SOFTWARE\LINEPRODUCTION\Configs";
-        // Public dirWip As String = ""
         public static string pathBackup = string.Empty;
         public static string pathWip = string.Empty;
         public static bool unlock = false;
@@ -75,14 +71,10 @@ namespace Line_Production
                                                     // Public setfilenamereport As String ' cai dat ten lien quan den file name của file report may chuc nang
         public static int CountLabel;
         public static string ModelRev = "";
-        // Public ModelRev2 As String = ""
         public static int ModelRevPosition = 0;
         public static string ModelCurrent = "";
         public static string Idcode = "";
-        // Public Idcode2 As String = ""
         public static short IdCodeLenght = 0;
-        // Public IdCodeLenght2 As Int16 = 0
-        // //////////////////////////////////////////////////////////////////////
         public static bool confirmCode_emp = false;
 
         // cac bien lien quan den com port
@@ -97,86 +89,15 @@ namespace Line_Production
         public static int SetStopBitsComPress = 1;
         public static string SetParityComPress = "None";
         public static string ArraySend = "S00000000000000B";
-        // ///////////////////////////////////////////////////////////////////////////////////////////////
-
-        public bool CheckComControlPort()
-        {
-            string com = Common.GetValueRegistryKey(PathConfig, "COM");
-            if (com == null || SerialPort.GetPortNames() == null || SerialPort.GetPortNames().Length == 0)
-            {
-                MessageBox.Show("Chưa kết nối cổng COM");
-                return false;
-            }
-            ComControl = com;
-            string baudRate = Common.GetValueRegistryKey(PathConfig, "BaudRate");
-            if (baudRate == null)
-            {
-                baudRate = Constants.BaudRate;
-                Common.WriteRegistry(PathConfig, "BaudRate", baudRate);
-            }
-            SetBaudRateComControl = (int)Conversion.Val(baudRate);
-            string dataBits = Common.GetValueRegistryKey(PathConfig, "DataBits");
-            if (dataBits == null)
-            {
-                dataBits = Constants.DataBits;
-                Common.WriteRegistry(PathConfig, "DataBits", dataBits);
-            }
-            SetDataBitsComControl = (int)Conversion.Val(dataBits); //8
-            string parity = Common.GetValueRegistryKey(PathConfig, "Parity");
-            if (parity == null)
-            {
-                parity = Constants.Parity;
-                Common.WriteRegistry(PathConfig, "Parity", dataBits);
-            }
-            SetParityComControl = parity; // None
-            string stopBits = Common.GetValueRegistryKey(PathConfig, "StopBits");
-            if (stopBits == null)
-            {
-                stopBits = Constants.StopBits;
-                Common.WriteRegistry(PathConfig, "StopBits", stopBits);
-            }
-            SetStopBitsComControl = (int)Conversion.Val(stopBits); //1
-            {
-                var withBlock = ComControlPort;
-                withBlock.PortName = ComControl;
-                withBlock.BaudRate = SetBaudRateComControl;
-                withBlock.DataBits = SetDataBitsComControl;
-                withBlock.Parity = Parity.None;
-                withBlock.StopBits = StopBits.One;
-                withBlock.Handshake = Handshake.None;
-                withBlock.ReceivedBytesThreshold = 1;
-            }
-            try
-            {
-                
-                if (ComControlPort.IsOpen == true)
-                {
-                    return false;
-                }
-                else
-                {
-                    ComControlPort.Open();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                MessageBox.Show("COM Control: " + ComControl + " not connect. Please check connect the device !", "Error device", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            return true;
-        }
-
 
         public bool Init()
         {
             try
             {
-                IdLine = Common.GetValueRegistryKey(PathConfig, "id");
-                STATION = Common.GetValueRegistryKey(PathConfig, "station");
-                pathBackup = Path.Combine(Common.GetValueRegistryKey(PathConfig, "pathWip"), "backup", DateTime.Now.ToString("yyyyMMdd"));
-                pathWip = Common.GetValueRegistryKey(PathConfig, "pathWip");
+                IdLine = Common.GetValueRegistryKey(PathConfig, RegistryKeys.id);
+                STATION = Common.GetValueRegistryKey(PathConfig, RegistryKeys.station);
+                pathBackup = Path.Combine(Common.GetValueRegistryKey(PathConfig, RegistryKeys.pathWip), "backup", DateTime.Now.ToString("yyyyMMdd"));
+                pathWip = Common.GetValueRegistryKey(PathConfig, RegistryKeys.pathWip);
 
                 if (!Directory.Exists(pathBackup))
                     Directory.CreateDirectory(pathBackup);
@@ -188,7 +109,7 @@ namespace Line_Production
                     Directory.CreateDirectory(PathReport);
                 if (Directory.Exists(pathConfirm) == false)
                     Directory.CreateDirectory(pathConfirm);
-                txtLine.Text = Common.GetValueRegistryKey(PathConfig, "id");
+                txtLine.Text = Common.GetValueRegistryKey(PathConfig, RegistryKeys.id);
             }
             catch (Exception e)
             {
@@ -201,14 +122,18 @@ namespace Line_Production
 
         public static bool SaveInit()
         {
-            if (Common.GetValueRegistryKey(PathConfig, "id") is null)
+            if (Common.GetValueRegistryKey(PathConfig, RegistryKeys.id) is null)
             {
-                Common.WriteRegistry(PathConfig, "id", "CA-Default");
-                Common.WriteRegistry(PathConfig, "nameLine", "Line-Default");
-                Common.WriteRegistry(PathConfig, "pathWip", @"C:\LOGPROCESS");
-                Common.WriteRegistry(PathConfig, "station", "VI2_CAN");
-                Common.WriteRegistry(PathConfig, "stationBefore", "CAMERA_CAN");
-                Common.WriteRegistry(PathConfig, "useWip", true.ToString());
+                Common.WriteRegistry(PathConfig, RegistryKeys.id, "CA-Default");
+                Common.WriteRegistry(PathConfig, RegistryKeys.pathWip, @"C:\LOGPROCESS");
+                Common.WriteRegistry(PathConfig, RegistryKeys.station, "VI2_CAN");
+                Common.WriteRegistry(PathConfig, RegistryKeys.useWip, true.ToString());
+                Common.WriteRegistry(PathConfig, RegistryKeys.LinkWip, true.ToString());
+                string[] listCOM = SerialPort.GetPortNames();
+                if(listCOM != null && listCOM.Length > 0)
+                {
+                    Common.WriteRegistry(PathConfig, RegistryKeys.COM, listCOM[0]);
+                }
                 return true;
             }
 

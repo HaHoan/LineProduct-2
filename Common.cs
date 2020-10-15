@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Ports;
 using System.Text;
 using Microsoft.Win32;
 
@@ -95,6 +97,27 @@ namespace Line_Production
             {
                 writer.Write(content.ToString());
             }
+        }
+        public static bool SendToComport(string data, Action<string> result)
+        {
+            try
+            {
+                SerialPort com = new SerialPort() { PortName = GetValueRegistryKey(Control.PathConfig, "COM") };
+                if (!com.IsOpen) com.Open();
+                if (com.IsOpen == true)
+                {
+                    com.Write(data);
+                }
+                com.Close();
+                result(ConstantsText.OK);
+                return true;
+            }
+            catch
+            {
+                result(ConstantsText.NG);
+                return false;
+            }
+
         }
     }
 }

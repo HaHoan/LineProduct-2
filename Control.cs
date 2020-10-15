@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -15,6 +16,8 @@ namespace Line_Production
 {
     public partial class Control : Form
     {
+        private System.Timers.Timer t = new System.Timers.Timer();
+        private System.Windows.Forms.Timer t2 = new System.Windows.Forms.Timer();
         public Control()
         {
             InitializeComponent();
@@ -100,6 +103,7 @@ namespace Line_Production
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
             Loadsetting();
             // Me.Height = 885
 
@@ -107,13 +111,15 @@ namespace Line_Production
 
         public void SetupDisplay()
         {
-            if (ComControlPort.IsOpen == true)
+            Common.SendToComport("S0000000000000R", (result) =>
             {
-                if (ComControlPort.IsOpen == true)
-                    ComControlPort.WriteLine("S0000000000000R");
-                if (ComControlPort.IsOpen == true)
-                    ComControlPort.Write("C");
-            }
+                lblState.Text = result;
+            });
+            Common.SendToComport("C", (result) =>
+            {
+                lblState.Text = result;
+            });
+
 
             cbbModel.Enabled = true;
             cbbModel.Text = "";
@@ -127,12 +133,8 @@ namespace Line_Production
                 notePerHour[index] = "";
             }
 
-            lblComcontrol.Text = ComControlPort.PortName;
-            lblState.Text = ComControlPort.IsOpen ? "Open" : "Close";
-            // lblUser.Text = Environment.UserName
+            lblComcontrol.Text = Common.GetValueRegistryKey(Control.PathConfig, "COM");
             chkNG.Enabled = false;
-            // Copyright.Text = My.Application.Info.Copyright.ToString
-            // Me.Text = My.Application.Info.Title.ToString & "_" & My.Application.Info.Version.ToString
             lblVersion.Text = GetRunningVersion();
             TextCycleTimeCurrent.Text = "0";
             TextCycleTimeModel.Text = "0";
@@ -192,19 +194,17 @@ namespace Line_Production
 
         private void Loadsetting()
         {
-            if (CheckComControlPort() == true)
+
+            if (CheckModelList() == true)
             {
-                if (CheckModelList() == true)
-                {
-                    SaveInit();
-                    Init();
-                    SetupDisplay();
-                }
-                else
-                {
-                    MessageBox.Show("File Setup List Model Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Environment.Exit(0);
-                }
+                SaveInit();
+                Init();
+                SetupDisplay();
+            }
+            else
+            {
+                MessageBox.Show("File Setup List Model Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
             }
 
         }
@@ -445,11 +445,18 @@ namespace Line_Production
                         Shape1.Visible = VisibleShow;
                         if (VisibleShow == false)
                         {
-                            if (ComControlPort.IsOpen == true)
-                                ComControlPort.Write("R");
+                            Common.SendToComport("R", result =>
+                             {
+                                 lblState.Text = result;
+                             });
                         }
-                        else if (ComControlPort.IsOpen == true)
-                            ComControlPort.Write("X");
+                        else
+                        {
+                            Common.SendToComport("X", result =>
+                            {
+                                lblState.Text = result;
+                            });
+                        }
                         Shape2.Visible = false;
                         Shape3.Visible = false;
                         break;
@@ -465,11 +472,19 @@ namespace Line_Production
                         Shape2.Visible = VisibleShow;
                         if (VisibleShow == false)
                         {
-                            if (ComControlPort.IsOpen == true)
-                                ComControlPort.Write("R");
+                            Common.SendToComport("R", result =>
+                            {
+                                lblState.Text = result;
+                            });
                         }
-                        else if (ComControlPort.IsOpen == true)
-                            ComControlPort.Write("V");
+                        else
+                        {
+                            Common.SendToComport("V", result =>
+                            {
+                                lblState.Text = result;
+                            });
+                        }
+
                         Shape3.Visible = false;
                         break;
                     }
@@ -485,11 +500,14 @@ namespace Line_Production
                         Shape3.Visible = VisibleShow;
                         if (VisibleShow == false)
                         {
-                            if (ComControlPort.IsOpen == true)
-                                ComControlPort.Write("R");
+                            Common.SendToComport("R", result => { lblState.Text = result; });
+
                         }
-                        else if (ComControlPort.IsOpen == true)
-                            ComControlPort.Write("D");
+                        else
+                        {
+                            Common.SendToComport("D", result => { lblState.Text = result; });
+                        }
+
                         break;
                     }
 
@@ -586,7 +604,15 @@ namespace Line_Production
                 ALARM = StatusLine,
                 STATUS = "STOP"
             };
-            _lineproduct_service.UpdateRealtime(ett);
+            try
+            {
+                _lineproduct_service.UpdateRealtime(ett);
+
+            }
+            catch (Exception)
+            {
+                
+            }
             // Repository.UpdatateData(entities)
             SetupDisplay();
         }
@@ -678,7 +704,6 @@ namespace Line_Production
         private void Timer1_Tick(object sender, EventArgs e)
         {
             LabelTimeDate.Text = DateAndTime.Now.ToString("HH:mm:ss  dd/MM/yyyy");
-            lblDate.Text = DateAndTime.Now.ToLongTimeString();
             _counter++;
             // TimerPress.Enabled = True
             if (BtStart.Text != "Bắt đầu")
@@ -820,9 +845,8 @@ namespace Line_Production
                     _lineproduct_service.UpdateRealtime(entities);
                     _counter = 0;
                 }
-                if (ComControlPort.IsOpen == true)
-                    ComControlPort.WriteLine(ArraySend);
-                // RecordDatabase()
+                Common.SendToComport(ArraySend, result => { lblState.Text = result; });
+
             }
         }
 
@@ -1117,11 +1141,14 @@ namespace Line_Production
 
         private void lblConfig_Click(object sender, EventArgs e)
         {
-            new frmConfig().ShowDialog();
+            frmConfig frmConfig = new frmConfig();
+            frmConfig.updateAfterSetting = () => { lblComcontrol.Text = Common.GetValueRegistryKey(PathConfig, RegistryKeys.COM); };
+            frmConfig.ShowDialog();
+
             // useWip = My.Settings.useWip
-            useWip = bool.Parse(Common.GetValueRegistryKey(PathConfig, "useWip"));
-            pathWip = Common.GetValueRegistryKey(PathConfig, "pathWip");
-            txtLine.Text = Common.GetValueRegistryKey(PathConfig, "id");
+            useWip = bool.Parse(Common.GetValueRegistryKey(PathConfig, RegistryKeys.useWip));
+            pathWip = Common.GetValueRegistryKey(PathConfig, RegistryKeys.pathWip);
+            txtLine.Text = Common.GetValueRegistryKey(PathConfig, RegistryKeys.id);
             Init();
             // dirWipMachine = My.Settings.pathWip
         }
@@ -1247,7 +1274,7 @@ namespace Line_Production
 
                         }
                         /* TODO ERROR: Skipped RegionDirectiveTrivia */
-                        else if (chkLinkWip.Checked)
+                        else if (bool.Parse(Common.GetValueRegistryKey(PathConfig, RegistryKeys.LinkWip)))
                         {
                             try
                             {
@@ -1453,13 +1480,6 @@ namespace Line_Production
             }
         }
 
-        private void Control_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (ComControlPort.IsOpen)
-            {
-                ComControlPort.Close();
-            }
-        }
     }
 }
 
