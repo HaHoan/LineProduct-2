@@ -38,6 +38,7 @@ namespace Line_Production.Database
                 Console.WriteLine("Openning Connection ...");
                 DB.Open();
                 HondaLocks = new HondaLocks();
+                ModelQuantities = new ModelQuantities();
                 Console.WriteLine("Connection successful!");
             }
             catch (Exception e)
@@ -48,6 +49,8 @@ namespace Line_Production.Database
             Console.Read();
         }
         public HondaLocks HondaLocks { get; set; }
+
+        public ModelQuantities ModelQuantities { get; set; }
 
         ~DataProvider()
         {

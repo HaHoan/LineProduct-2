@@ -2,15 +2,25 @@
 {
     public partial class Model
     {
+        public int Id { get; set; }
         public string ModelID { get; set; }
         public double Cycle { get; set; }
-        public bool BarcodeEnable { get; set; }
-        public int Arlarm { get; set; }
-        public int ArlarmHeight { get; set; }
-        public int? Length { get; set; }
-        public string Regex { get; set; }
-        public int People { get; set; }
-        public int PcbBox { get; set; }
-        public string CustomerID { get; set; }
+        public bool UseBarcode { get; set; }
+        public double WarnQuantity { get; set; }
+        public double MinQuantity { get; set; }
+        public int PersonInLine { get; set; }
+        public string CharModel { get; set; }
+    }
+    public static class ModelString
+    {
+        public static string Id = "Id";
+        public static string ModelID = "Model";
+        public static string PersonPerLine = "PersonPerLine";
+        public static string CycleTime = "CycleTime";
+        public static string WarnQuantity = "WarnQuantity";
+        public static string MinQuantity = "MinQuantity";
+        public static string CharModel = "CharModel";
+        public static string UseBarcode = "UseBarcode";
+
     }
 }

@@ -2,6 +2,8 @@
 using System.IO;
 using System.IO.Ports;
 using System.Windows.Forms;
+using Line_Production.Database;
+using Line_Production.Entities;
 using Microsoft.VisualBasic; // Install-Package Microsoft.VisualBasic
 
 namespace Line_Production
@@ -12,10 +14,7 @@ namespace Line_Production
         public static string PathApplication = Application.StartupPath;
         public static string PathSetup = PathApplication + @"\Setup";
         public static string PathPassrate = PathApplication + @"\Passrate";
-        public static string PathModelList = PathSetup + @"\List model.ini";
-        public static string PathPassList = PathSetup + @"\SetupListPass.ini";
         public static bool waitWipConfirm = true;
-        public static string PathReport = PathApplication + @"\Report";
         public static string PathConfig = @"SOFTWARE\LINEPRODUCTION\Configs";
         public static string pathBackup = string.Empty;
         public static string pathWip = string.Empty;
@@ -71,7 +70,7 @@ namespace Line_Production
                                                     // Public setfilenamereport As String ' cai dat ten lien quan den file name của file report may chuc nang
         public static int CountLabel;
         public static string ModelRev = "";
-        public static int ModelRevPosition = 0;
+        public static int ModelRevPosition = 1;
         public static string ModelCurrent = "";
         public static string Idcode = "";
         public static short IdCodeLenght = 0;
@@ -105,10 +104,7 @@ namespace Line_Production
                     Directory.CreateDirectory(Path.Combine(pathBackup, "OK"));
                 if (!Directory.Exists(Path.Combine(pathBackup, "NG")))
                     Directory.CreateDirectory(Path.Combine(pathBackup, "NG"));
-                if (Directory.Exists(PathReport) == false)
-                    Directory.CreateDirectory(PathReport);
-                if (Directory.Exists(pathConfirm) == false)
-                    Directory.CreateDirectory(pathConfirm);
+               
                 txtLine.Text = Common.GetValueRegistryKey(PathConfig, RegistryKeys.id);
             }
             catch (Exception e)
@@ -130,7 +126,7 @@ namespace Line_Production
                 Common.WriteRegistry(PathConfig, RegistryKeys.useWip, true.ToString());
                 Common.WriteRegistry(PathConfig, RegistryKeys.LinkWip, true.ToString());
                 string[] listCOM = SerialPort.GetPortNames();
-                if(listCOM != null && listCOM.Length > 0)
+                if (listCOM != null && listCOM.Length > 0)
                 {
                     Common.WriteRegistry(PathConfig, RegistryKeys.COM, listCOM[0]);
                 }
@@ -142,16 +138,14 @@ namespace Line_Production
 
         public bool CheckModelList()
         {
-            if (File.Exists(PathModelList) == true)
+            var list = DataProvider.Instance.ModelQuantities.Select();
+            foreach (var model in list)
             {
-                for (int index = 1, loopTo = CounterlineTextFile(PathModelList); index <= loopTo; index++)
-                    cbbModel.Items.Add(ReadTextFile(PathModelList, index));
-                return true;
+                cbbModel.Items.Add(model.ModelID);
             }
-            else
-            {
-                return false;
-            }
+
+            return true;
+
         }
 
         public bool LoadModelCurrent(string ModelLoad)
@@ -160,67 +154,29 @@ namespace Line_Production
             PathModelCurrent = "";
             if (Strcheck.Length != 0)
             {
-                PathModelCurrent = PathSetup + @"\" + ModelLoad + ".ini";
-                if (File.Exists(PathModelCurrent) == true)
+                Model model = DataProvider.Instance.ModelQuantities.Select(Strcheck);
+                try
                 {
-                    try
-                    {
-                        NoPeople = int.Parse(ReadTextFile(PathModelCurrent, 2));
-                        CycleTimeModel = double.Parse(ReadTextFile(PathModelCurrent, 4));
-                        BarcodeEnable = ReadTextFile(PathModelCurrent, 6) == "1" ? true : false;
-                        BalanceAlarmSetup = int.Parse(ReadTextFile(PathModelCurrent, 8));
-                        BalanceErrorSetup = int.Parse(ReadTextFile(PathModelCurrent, 10));
-                        IdCodeLenght = short.Parse(ReadTextFile(PathModelCurrent, 12));
-                        ModelRevPosition = int.Parse(ReadTextFile(PathModelCurrent, 14));
-                        ModelRev = ReadTextFile(PathModelCurrent, 16);
-                        //  PCBBOX = int.Parse(ReadTextFile(PathModelCurrent, 18));
-                        ConfirmModel = ReadTextFile(PathModelCurrent, 20) == "1" ? true : false;
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message.ToString());
-                        return false;
-                    }
-
-                    return true;
+                    NoPeople = model.PersonInLine;
+                    CycleTimeModel = model.Cycle;
+                    BarcodeEnable = model.UseBarcode;
+                    BalanceAlarmSetup = (int)model.WarnQuantity;
+                    BalanceErrorSetup = (int)model.MinQuantity;
+                    ModelRev = model.CharModel;
+                    ConfirmModel = false;
                 }
-                else
+                catch (Exception e)
                 {
+                    MessageBox.Show(e.Message.ToString());
                     return false;
                 }
+
+                return true;
+
             }
             else
             {
                 return false;
-            }
-        }
-
-        public static int CheckTotalLabel(string Id)
-        {
-            string Strcheck = Id;
-            string Linecheck = "";
-            PathModelCurrent = "";
-            if (Strcheck.Length != 0)
-            {
-                int CountLine = CounterlineTextFile(PathModelList);
-                while (CountLine > 0)
-                {
-                    Linecheck = ReadTextFile(PathModelList, CountLine);
-                    if (Strcheck.Contains(Linecheck) == true)
-                    {
-                        ModelCurrent = Linecheck;
-                        PathModelCurrent = PathSetup + @"\" + Linecheck + ".ini";
-                        return CountLabel;
-                    }
-
-                    CountLine = CountLine - 1;
-                }
-
-                return 0;
-            }
-            else
-            {
-                return 0;
             }
         }
 

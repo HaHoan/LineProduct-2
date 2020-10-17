@@ -277,16 +277,6 @@ namespace Line_Production
                 text_passrate.Close();
             }
 
-            string FileReport = PathReport + @"\" + ModelCurrent + @"\" + Datecheck + ".csv";
-            if (Directory.Exists(PathReport + @"\" + ModelCurrent) == false)
-                Directory.CreateDirectory(PathReport + @"\" + ModelCurrent);
-            if (File.Exists(FileReport) == false)
-            {
-                var file = new StreamWriter(FileReport, true); // append enable
-                file.WriteLine("No,Time,NoPCBA,MAC Box,Id PCBA,User");
-                file.Close();
-            }
-            // RecordDatabase()
         }
 
         public void RecordProduction()
@@ -867,55 +857,6 @@ namespace Line_Production
             Application.Exit();
         }
 
-        public bool CheckIDExistEx(string Idcheck)
-        {
-            string FileReport = PathReport + @"\" + ModelCurrent + @"\" + Datecheck + ".csv";
-            if (Directory.Exists(PathReport + @"\" + ModelCurrent) == false)
-                Directory.CreateDirectory(PathReport + @"\" + ModelCurrent);
-            string astring = ReadAllLine(FileReport);
-            if (!string.IsNullOrEmpty(astring))
-            {
-                if (astring.Contains(Idcheck) == false)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        // Kiểm tra xem thùng đã đầy chưa
-
-        public bool CheckMacBox(string Idcheck)
-        {
-            string FileReport = PathReport + @"\" + ModelCurrent + @"\" + Datecheck + ".csv";
-            if (Directory.Exists(PathReport + @"\" + ModelCurrent) == false)
-                Directory.CreateDirectory(PathReport + @"\" + ModelCurrent);
-            string astring = ReadAllLine(FileReport);
-            if (!string.IsNullOrEmpty(astring))
-            {
-                if (astring.Contains(Idcheck) == false)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-
         private void KiemTraTrenHondaLock(Action ChuaTonTai, Action DaTonTai)
         {
             // Check trên HondaLock
@@ -1077,80 +1018,19 @@ namespace Line_Production
 
         private void txtSearch_KeyPress(object sender, KeyPressEventArgs e)
         {
-            var listReport = new List<ObjReport>();
-            if (e.KeyChar == 13)
-            {
-                if (Strings.Mid(txtSearch.Text.Trim().ToUpper(), 1, 1) == "F")
-                {
-                    string FileReport = PathReport + @"\" + ModelCurrent + @"\" + Datecheck + ".csv";
-                    if (File.Exists(FileReport))
-                    {
-                        var lst = File.ReadAllLines(FileReport).ToList();
-                        foreach (var item in lst)
-                        {
-                            if (item.Contains(txtSearch.Text.Trim()))
-                            {
-                                var temp = item.Split(',').ToList();
-                                var obj = new ObjReport(temp.ElementAt(1), temp.ElementAt(2), temp.ElementAt(3));
-                                listReport.Add(obj);
-                            }
-                        }
-
-                        var res = new ResultForm();
-                        res.Show();
-                        res.StartPosition = FormStartPosition.CenterScreen;
-                        res.dgv.DataSource = listReport;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Không có dữ liệu", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                else
-                {
-                    txtSearch.SelectAll();
-                    MessageBox.Show("Sai mã thùng", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
+            
         }
 
-        // Private Sub Control_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        // ' QuyetPham add 20.7.2018
-        // Try
-        // Dim production = New ProductionEntity() With
-        // {
-        // .Barcode = txtSerial.Text,
-        // .LineID = txtLine.Text,
-        // .ModelID = cbbModel.Text,
-        // .LineState = state(2),
-        // .Message = "",
-        // .Quantity = 0,
-        // .ShiftID = If(txtShift.Text = "Ca Ngày", shift(0), shift(1)),
-        // .Plan = 0,
-        // .Actual = 0,
-        // .Difference = 0,
-        // .People = txtPeople.Text,
-        // .CycleTime = TextCycleTimeModel.Text
-        // }
-        // 'PostProduction(production)
-        // Catch ex As Exception
-
-        // End Try
-        // ' End
-        // End Sub
 
         private void lblConfig_Click(object sender, EventArgs e)
         {
             frmConfig frmConfig = new frmConfig();
             frmConfig.updateAfterSetting = () => { lblComcontrol.Text = Common.GetValueRegistryKey(PathConfig, RegistryKeys.COM); };
             frmConfig.ShowDialog();
-
-            // useWip = My.Settings.useWip
             useWip = bool.Parse(Common.GetValueRegistryKey(PathConfig, RegistryKeys.useWip));
             pathWip = Common.GetValueRegistryKey(PathConfig, RegistryKeys.pathWip);
             txtLine.Text = Common.GetValueRegistryKey(PathConfig, RegistryKeys.id);
             Init();
-            // dirWipMachine = My.Settings.pathWip
         }
 
         private void chkNG_CheckedChanged(object sender, EventArgs e)
@@ -1173,9 +1053,6 @@ namespace Line_Production
             frmLogin.txtPassword.Clear();
             frmLogin.txtUsername.Select();
             frmLogin.Show();
-            // Appac
-            // Control.ActiveForm
-            // Me.Close()
         }
 
         private void Timer3_Tick(object sender, EventArgs e)
@@ -1258,7 +1135,6 @@ namespace Line_Production
             pvsservice = new PVSReference.PVSWebServiceSoapClient();
             if (e.KeyCode == Keys.Enter)
             {
-                // txtSerial.Text = txtSerial.Text.TrimStart.TrimEnd()
                 if (Strings.Mid(txtSerial.Text, ModelRevPosition, ModelRev.Length) == ModelRev)
                 {
                     if (PauseProduct == false)
@@ -1266,7 +1142,6 @@ namespace Line_Production
                         if (chkNG.Checked)
                         {
                             var content = new StringBuilder();
-                            // Dim sTime As String = DateTime.Now.ToString("yyMMddHHmmss")
                             string sTime = pvsservice.GetDateTime().ToString("yyMMddHHmmss");
                             content.AppendLine(string.Join("|", cbbModel.Text, txtSerial.Text, sTime, State.F.ToString(), STATION));
                             Common.WriteLog(Path.Combine(pathWip, $"{sTime}_{txtSerial.Text.Trim()}.txt"), content);
@@ -1406,8 +1281,6 @@ namespace Line_Production
                             {
                                 var contentWip = new StringBuilder();
                                 string sTime = pvsservice.GetDateTime().ToString("yyMMddHHmmss");
-                                if (Directory.Exists(PathReport + @"\" + ModelCurrent) == false)
-                                    Directory.CreateDirectory(PathReport + @"\" + ModelCurrent);
                                 contentWip.AppendLine(string.Join("|", cbbModel.Text, txtSerial.Text, sTime, State.P.ToString(), STATION));
                                 Common.WriteLog(Path.Combine(pathWip, $"{sTime}_{txtSerial.Text.Trim()}.txt"), contentWip);
                                 Common.WriteLog(Path.Combine(pathBackup, "OK", $"{sTime}_{txtSerial.Text.Trim()}.txt"), contentWip);
@@ -1480,6 +1353,10 @@ namespace Line_Production
             }
         }
 
+        private void lblListModel_Click(object sender, EventArgs e)
+        {
+            new ListModel().ShowDialog();
+        }
     }
 }
 

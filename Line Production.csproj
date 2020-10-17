@@ -78,6 +78,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddModelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddModelForm.Designer.cs">
+      <DependentUpon>AddModelForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common.cs" />
     <Compile Include="Connected Services\LineProductWebServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -105,6 +111,7 @@
     <Compile Include="Database\DBSQLServerUtils.cs" />
     <Compile Include="Database\DBUtils.cs" />
     <Compile Include="Database\HondaLocks.cs" />
+    <Compile Include="Database\ModelQuantities.cs" />
     <Compile Include="Entities\HondaLock.cs" />
     <Compile Include="Entities\Model.cs" />
     <Compile Include="Entities\Online.cs" />
@@ -122,6 +129,12 @@
     </Compile>
     <Compile Include="Khaibaobien.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListModel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListModel.Designer.cs">
+      <DependentUpon>ListModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Module.cs">
       <SubType>Form</SubType>
@@ -148,6 +161,9 @@
     <Compile Include="Schedule.Designer.cs">
       <DependentUpon>Schedule.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AddModelForm.resx">
+      <DependentUpon>AddModelForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Control.resx">
       <DependentUpon>Control.cs</DependentUpon>
     </EmbeddedResource>
@@ -156,6 +172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmConfig.resx">
       <DependentUpon>frmConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListModel.resx">
+      <DependentUpon>ListModel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NG_FORM.resx">
       <DependentUpon>NG_FORM.cs</DependentUpon>
@@ -285,6 +304,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <Content Include="favicon.ico" />
+    <None Include="Resources\construction.png" />
     <Content Include="Resources\icons8-user-16.png" />
     <Content Include="Resources\icons8-user-30.png" />
     <Content Include="Resources\login-16x14.png" />
@@ -299,6 +319,7 @@
     <Content Include="Resources\secrecy-icon.png" />
     <Content Include="Resources\secrecy-icon1.png" />
     <None Include="Resources\stop.png" />
+    <None Include="Resources\setting.png" />
     <Content Include="Resources\tools-16.png" />
     <Content Include="Resources\umcvn.jpg" />
   </ItemGroup>
