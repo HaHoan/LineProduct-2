@@ -45,11 +45,11 @@ namespace Line_Production
             this.Label3 = new System.Windows.Forms.Label();
             this.txtId = new System.Windows.Forms.TextBox();
             this.Label5 = new System.Windows.Forms.Label();
-            this.btnSaveChanged = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.cbbCOM = new System.Windows.Forms.ComboBox();
             this.btnTestCOM = new System.Windows.Forms.Button();
             this.chkLinkWip = new System.Windows.Forms.CheckBox();
+            this.btnSaveChanged = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // chkWip
@@ -57,7 +57,7 @@ namespace Line_Production
             this.chkWip.AutoSize = true;
             this.chkWip.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkWip.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.chkWip.Location = new System.Drawing.Point(183, 174);
+            this.chkWip.Location = new System.Drawing.Point(183, 178);
             this.chkWip.Name = "chkWip";
             this.chkWip.Size = new System.Drawing.Size(109, 17);
             this.chkWip.TabIndex = 2;
@@ -124,24 +124,6 @@ namespace Line_Production
             this.Label5.TabIndex = 35;
             this.Label5.Text = "Line";
             // 
-            // btnSaveChanged
-            // 
-            this.btnSaveChanged.BackColor = System.Drawing.Color.Green;
-            this.btnSaveChanged.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSaveChanged.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveChanged.ForeColor = System.Drawing.Color.White;
-            this.btnSaveChanged.Image = global::Line_Production.Properties.Resources.Save;
-            this.btnSaveChanged.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSaveChanged.Location = new System.Drawing.Point(87, 210);
-            this.btnSaveChanged.Name = "btnSaveChanged";
-            this.btnSaveChanged.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.btnSaveChanged.Size = new System.Drawing.Size(118, 30);
-            this.btnSaveChanged.TabIndex = 24;
-            this.btnSaveChanged.Text = "Save change";
-            this.btnSaveChanged.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnSaveChanged.UseVisualStyleBackColor = false;
-            this.btnSaveChanged.Click += new System.EventHandler(this.btnSaveChanged_Click);
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -175,19 +157,37 @@ namespace Line_Production
             this.chkLinkWip.AutoSize = true;
             this.chkLinkWip.Checked = true;
             this.chkLinkWip.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkLinkWip.Location = new System.Drawing.Point(87, 174);
+            this.chkLinkWip.Location = new System.Drawing.Point(87, 178);
             this.chkLinkWip.Name = "chkLinkWip";
             this.chkLinkWip.Size = new System.Drawing.Size(70, 17);
             this.chkLinkWip.TabIndex = 40;
             this.chkLinkWip.Text = "Link WIP";
             this.chkLinkWip.UseVisualStyleBackColor = true;
             // 
+            // btnSaveChanged
+            // 
+            this.btnSaveChanged.BackColor = System.Drawing.Color.Green;
+            this.btnSaveChanged.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSaveChanged.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSaveChanged.ForeColor = System.Drawing.Color.White;
+            this.btnSaveChanged.Image = global::Line_Production.Properties.Resources.Save;
+            this.btnSaveChanged.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSaveChanged.Location = new System.Drawing.Point(174, 215);
+            this.btnSaveChanged.Name = "btnSaveChanged";
+            this.btnSaveChanged.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.btnSaveChanged.Size = new System.Drawing.Size(118, 30);
+            this.btnSaveChanged.TabIndex = 24;
+            this.btnSaveChanged.Text = "Save change";
+            this.btnSaveChanged.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnSaveChanged.UseVisualStyleBackColor = false;
+            this.btnSaveChanged.Click += new System.EventHandler(this.btnSaveChanged_Click);
+            // 
             // frmConfig
             // 
             this.AcceptButton = this.btnSaveChanged;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(350, 308);
+            this.ClientSize = new System.Drawing.Size(350, 269);
             this.Controls.Add(this.chkLinkWip);
             this.Controls.Add(this.btnTestCOM);
             this.Controls.Add(this.cbbCOM);

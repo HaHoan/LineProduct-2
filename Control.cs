@@ -619,19 +619,7 @@ namespace Line_Production
                 {
                     if (index % 2 != 0 & sumtime >= TimeLine[index].Hour * 100 + TimeLine[index].Minute & sumtime <= TimeLine[index + 1].Hour * 100 + TimeLine[index + 1].Minute)
                     {
-                        // CountProduct = CountProduct + 1
                         bien_dem = bien_dem + 1;
-                        // If CountProduct = 1 Then
-                        // CycleTimeActual = CalTimeWork(time_scanBarcode, Now)
-                        // Else
-                        // TimeCycleActual = TimeCycleActual + CalTimeWork(time_scanBarcode, Now)
-                        // CycleTimeActual = Math.Round(TimeCycleActual / CountProduct, 1, MidpointRounding.AwayFromZero)
-                        // End If
-                        // time_scanBarcode = Now
-                        // TextCycleTimeCurrent.Text = CycleTimeActual
-                        // LabelCountProduct.Text = CountProduct
-                        // ProductPlan = Math.Round(TimeCycleActual / CycleTimeModel, 0, MidpointRounding.AwayFromZero)
-                        // TextPlan.Text = ProductPlan
                         CountProductPerHour[index / 2 + 1] = CountProductPerHour[index / 2 + 1] + 1;
                         Table1.Controls.Find("TextActual" + (index / 2 + 1), true)[0].Text = CountProductPerHour[index / 2 + 1].ToString();
                         Table1.Controls.Find("TextBalance" + (index / 2 + 1), true)[0].Text = (CountProductPerHour[index / 2 + 1] - int.Parse(Table1.Controls.Find("TextPlan" + (index / 2 + 1), true)[0].Text)).ToString();
@@ -1356,6 +1344,12 @@ namespace Line_Production
         private void lblListModel_Click(object sender, EventArgs e)
         {
             new ListModel().ShowDialog();
+        }
+
+        private void lblSettingTime_Click(object sender, EventArgs e)
+        {
+            var timeLine = new TimeDetailForm();
+            timeLine.ShowDialog();
         }
     }
 }

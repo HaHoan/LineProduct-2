@@ -12,7 +12,6 @@ namespace Line_Production
     {
         // bien quy dinh duong dan file
         public static string PathApplication = Application.StartupPath;
-        public static string PathSetup = PathApplication + @"\Setup";
         public static string PathPassrate = PathApplication + @"\Passrate";
         public static bool waitWipConfirm = true;
         public static string PathConfig = @"SOFTWARE\LINEPRODUCTION\Configs";
@@ -104,7 +103,7 @@ namespace Line_Production
                     Directory.CreateDirectory(Path.Combine(pathBackup, "OK"));
                 if (!Directory.Exists(Path.Combine(pathBackup, "NG")))
                     Directory.CreateDirectory(Path.Combine(pathBackup, "NG"));
-               
+
                 txtLine.Text = Common.GetValueRegistryKey(PathConfig, RegistryKeys.id);
             }
             catch (Exception e)
@@ -182,77 +181,28 @@ namespace Line_Production
 
         public static bool CheckCaSX()
         {
+            int caSX = 0;
             if (DateAndTime.Now.Hour >= 8 & DateAndTime.Now.Hour <= 19)
             {
                 Shiftcheck = true;
-                string PathTimeLine = PathSetup + @"\Setup Time Line Day.ini";
-                string ReadTime = ReadTextFile(PathTimeLine, 2);
-                TimeLine[1] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[2] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 4);
-                TimeLine[3] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[4] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 6);
-                TimeLine[5] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[6] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 8);
-                TimeLine[7] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[8] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 10);
-                TimeLine[9] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[10] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 12);
-                TimeLine[11] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[12] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 14);
-                TimeLine[13] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[14] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 16);
-                TimeLine[15] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[16] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 18);
-                TimeLine[17] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[18] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 20);
-                TimeLine[19] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[20] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
+                caSX = CaSX.DAY;
             }
             else
             {
                 Shiftcheck = false;
-                string PathTimeLine = PathSetup + @"\Setup Time Line Night.ini";
-                string ReadTime = ReadTextFile(PathTimeLine, 2);
-                TimeLine[1] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[2] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 4);
-                TimeLine[3] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[4] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 6);
-                TimeLine[5] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[6] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 8);
-                TimeLine[7] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[8] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 10);
-                TimeLine[9] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[10] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 12);
-                TimeLine[11] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[12] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 14);
-                TimeLine[13] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[14] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 16);
-                TimeLine[15] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[16] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 18);
-                TimeLine[17] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[18] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
-                ReadTime = ReadTextFile(PathTimeLine, 20);
-                TimeLine[19] = Convert.ToDateTime(Strings.Mid(ReadTime, 1, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) - 1));
-                TimeLine[20] = Convert.ToDateTime(Strings.Mid(ReadTime, Strings.InStr(1, ReadTime, ",", CompareMethod.Text) + 1, ReadTime.Length));
+                caSX = CaSX.NIGHT;
             }
-
+            var list = DataProvider.Instance.TimeLines.Select(Common.GetValueRegistryKey(PathConfig, RegistryKeys.id), caSX);
+            if (list == null || list.Count == 0)
+            {
+                MessageBox.Show("Không lấy được timeLine! Vui lòng kiểm tra lại!");
+                return false;
+            }
+            foreach (var time in list)
+            {
+                TimeLine[2 * time.TimeIndex - 1] = Convert.ToDateTime(time.TimeFrom);
+                TimeLine[2 * time.TimeIndex] = Convert.ToDateTime(time.TimeTo);
+            }
             return Shiftcheck;
         }
 

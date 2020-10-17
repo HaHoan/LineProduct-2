@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Line_Production.Database;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,6 +25,8 @@ namespace Line_Production
         private void btnSaveChanged_Click(object sender, EventArgs e)
         {
             Common.WriteRegistry(Control.PathConfig, RegistryKeys.id, txtId.Text);
+            if (!string.IsNullOrEmpty(txtId.Text))
+                DataProvider.Instance.TimeLines.InsertLine(txtId.Text);
             Common.WriteRegistry(Control.PathConfig, RegistryKeys.useWip, chkWip.Checked.ToString());
             Common.WriteRegistry(Control.PathConfig, RegistryKeys.pathWip, txtLog.Text);
             Common.WriteRegistry(Control.PathConfig, RegistryKeys.station, txtStation.Text.Trim());
@@ -67,5 +70,6 @@ namespace Line_Production
         {
             Common.SendToComport("test", result => { MessageBox.Show("Test COM connection : " + result); });
         }
+
     }
 }

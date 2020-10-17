@@ -28,4 +28,9 @@ namespace Line_Production
         public static string COM = "COM";
         public static string LinkWip = "LinkWip";
     }
+    public static class CaSX
+    {
+        public static int DAY = 0;
+        public static int NIGHT = 1;
+    }
 }

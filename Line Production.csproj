@@ -112,9 +112,11 @@
     <Compile Include="Database\DBUtils.cs" />
     <Compile Include="Database\HondaLocks.cs" />
     <Compile Include="Database\ModelQuantities.cs" />
+    <Compile Include="Database\TimeLines.cs" />
     <Compile Include="Entities\HondaLock.cs" />
     <Compile Include="Entities\Model.cs" />
     <Compile Include="Entities\Online.cs" />
+    <Compile Include="Entities\TimeLine.cs" />
     <Compile Include="fmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,6 +163,12 @@
     <Compile Include="Schedule.Designer.cs">
       <DependentUpon>Schedule.cs</DependentUpon>
     </Compile>
+    <Compile Include="TimeDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TimeDetailForm.Designer.cs">
+      <DependentUpon>TimeDetailForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AddModelForm.resx">
       <DependentUpon>AddModelForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -191,6 +199,9 @@
     </Compile>
     <EmbeddedResource Include="Schedule.resx">
       <DependentUpon>Schedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TimeDetailForm.resx">
+      <DependentUpon>TimeDetailForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Connected Services\LineProductWebServiceReference\LineProductRealtimeWebService.wsdl" />
     <None Include="Connected Services\LineProductWebServiceReference\Line_Production.LineProductWebServiceReference.ArrayOfString.datasource">
@@ -305,6 +316,7 @@
     </None>
     <Content Include="favicon.ico" />
     <None Include="Resources\construction.png" />
+    <None Include="Resources\icons8-time-30.png" />
     <Content Include="Resources\icons8-user-16.png" />
     <Content Include="Resources\icons8-user-30.png" />
     <Content Include="Resources\login-16x14.png" />
