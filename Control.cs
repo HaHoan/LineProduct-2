@@ -211,70 +211,46 @@ namespace Line_Production
 
         public void LoadProduction()
         {
-            string fileload = PathPassrate + @"\" + ModelCurrent + @"\" + Datecheck + "_" + Shiftcheck + ".txt";
-            string FolderLoad = PathPassrate + @"\" + ModelCurrent;
-            if (Directory.Exists(FolderLoad) == false)
-                Directory.CreateDirectory(FolderLoad);
-            if (File.Exists(fileload) == true)
+            string line = Common.GetValueRegistryKey(PathConfig, RegistryKeys.id);
+            PassRate passRate = DataProvider.Instance.PassRates.GetPassRate(line, cbbModel.Text, Datecheck + "_" + Shiftcheck);
+            if (passRate != null)
             {
-                ProductPlanBegin = int.Parse(ReadTextFile(fileload, 2));
-                ProductPlan = int.Parse(ReadTextFile(fileload, 2));
-                CountProduct = int.Parse(ReadTextFile(fileload, 4));
+                ProductPlanBegin = passRate.ProductPlan;
+                ProductPlan = passRate.ProductPlan;
+                CountProduct = passRate.Actual;
                 IDCount = 0;
                 IDCount_box = 0;
                 Box_curent = "";
-                TimeCycleActual = int.Parse(ReadTextFile(fileload, 32));
-                for (int index = 1; index <= 10; index++)
+                TimeCycleActual = (int)passRate.TimeCycleActual;
+                for (int index = 0; index < 10; index++)
                 {
-                    CountProductPerHour[index] = int.Parse(ReadTextFile(fileload, 2 * (index + 2)));
-                    notePerHour[index] = ReadTextFile(fileload, 32 + index);
+                    CountProductPerHour[index + 1] = int.Parse(passRate.TimeValue[index]);
+                    notePerHour[index + 1] = "";
                 }
             }
             else
             {
-                FilePassrate = fileload;
                 for (int index = 1; index <= 10; index++)
                 {
                     CountProductPerHour[index] = 0;
                     notePerHour[index] = "";
                 }
-
-                var text_passrate = new StreamWriter(FilePassrate);
-                text_passrate.WriteLine("# 1 Plan");
-                text_passrate.WriteLine(ProductPlan);
-                text_passrate.WriteLine("#2 Actual");
-                text_passrate.WriteLine(CountProduct);
-                text_passrate.WriteLine("# 3 Production In Time 1 8>9");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 4 Production In Time 2 9>10");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 5 Production In Time 3	10>11");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 6 Production In Time 4	11>12");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 7 Production In Time 5	12>13");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 8 Production In Time 6	13>14");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 9 Production In Time 7	14>15");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 10 Production In Time 8	15>16");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 11 Production In Time 9	16>17");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 12 Production In Time 10	17>20");
-                text_passrate.WriteLine(0);
-                text_passrate.WriteLine("# 13 so luong mach hien tai");
-                text_passrate.WriteLine(IDCount);
-                text_passrate.WriteLine("# 14 so luong thung hien tai");
-                text_passrate.WriteLine(IDCount_box);
-                text_passrate.WriteLine("# 15 ma thung hien tai");
-                text_passrate.WriteLine(Box_curent);
-                text_passrate.WriteLine("# 16 CycleTime hien tai");
-                text_passrate.WriteLine(TimeCycleActual);
-                for (int i = 1; i <= 10; i++)
-                    text_passrate.WriteLine("");
-                text_passrate.Close();
+                PassRate p = new PassRate();
+                p.ProductionID = cbbModel.Text;
+                p.Line = line;
+                p.Time = Datecheck + "_" + Shiftcheck;
+                p.ProductPlan = ProductPlan;
+                p.Actual = CountProduct;
+                p.IDCount = IDCount;
+                p.IDCountBox = IDCount_box;
+                p.BoxCurrent = Box_curent;
+                p.TimeCycleActual = TimeCycleActual;
+                p.TimeValue = new string[10];
+                for (int index = 0; index < 10; index++)
+                {
+                    p.TimeValue[index] = "0";
+                }
+                DataProvider.Instance.PassRates.Insert(p);
             }
 
         }
@@ -283,60 +259,40 @@ namespace Line_Production
         {
             if (ModelCurrent != "")
             {
-                string fileload = PathPassrate + @"\" + ModelCurrent + @"\" + Datecheck + "_" + Shiftcheck + ".txt";
-                if (File.Exists(fileload) == true)
+                string line = Common.GetValueRegistryKey(PathConfig, RegistryKeys.id);
+                PassRate passRate = DataProvider.Instance.PassRates.GetPassRate(line, cbbModel.Text, Datecheck + "_" + Shiftcheck);
+                if (passRate != null)
                 {
-                    ReplaceLine(fileload, 2, ProductPlan.ToString());
-                    ReplaceLine(fileload, 4, CountProduct.ToString());
-                    ReplaceLine(fileload, 26, IDCount.ToString());
-                    ReplaceLine(fileload, 28, IDCount_box.ToString());
-                    ReplaceLine(fileload, 30, Box_curent);
-                    ReplaceLine(fileload, 32, TimeCycleActual.ToString());
-                    for (int index = 1; index <= 10; index++)
+                    passRate.ProductPlan = ProductPlan;
+                    passRate.Actual = CountProduct;
+                    passRate.IDCount = IDCount;
+                    passRate.IDCountBox = IDCount_box;
+                    passRate.BoxCurrent = Box_curent;
+                    passRate.TimeCycleActual = TimeCycleActual;
+                    for (int index = 0; index < 10; index++)
                     {
-                        ReplaceLine(fileload, 2 * (index + 2), CountProductPerHour[index].ToString());
-                        ReplaceLine(fileload, 32 + index, Table1.Controls.Find("TextComment" + index, true)[0].Text);
+                        passRate.TimeValue[index] = CountProductPerHour[index + 1].ToString();
                     }
+                    DataProvider.Instance.PassRates.Update(passRate);
                 }
                 else
                 {
-                    FilePassrate = fileload;
-                    var text_passrate = new StreamWriter(FilePassrate);
-                    text_passrate.WriteLine("# 1 Plan");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("#2 Actual");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 3 Production In Time 1 8>9");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 4 Production In Time 2 9>10");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 5 Production In Time 3	10>11");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 6 Production In Time 4	11>12");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 7 Production In Time 5	12>13");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 8 Production In Time 6	13>14");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 9 Production In Time 7	14>15");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 10 Production In Time 8	15>16");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 11 Production In Time 9	16>17");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 12 Production In Time 10	17>20");
-                    text_passrate.WriteLine(0);
-                    text_passrate.WriteLine("# 13 so luong mach hien tai");
-                    text_passrate.WriteLine(IDCount);
-                    text_passrate.WriteLine("# 14 so luong thung hien tai");
-                    text_passrate.WriteLine(IDCount_box);
-                    text_passrate.WriteLine("# 15 ma thung hien tai");
-                    text_passrate.WriteLine(Box_curent);
-                    text_passrate.WriteLine("# 16 CycleTime hien tai");
-                    text_passrate.WriteLine(TimeCycleActual);
-                    for (int i = 1; i <= 10; i++)
-                        text_passrate.WriteLine("");
-                    text_passrate.Close();
+                    PassRate p = new PassRate();
+                    p.ProductionID = cbbModel.Text;
+                    p.Line = line;
+                    p.Time = Datecheck + "_" + Shiftcheck;
+                    p.ProductPlan = ProductPlan;
+                    p.Actual = CountProduct;
+                    p.IDCount = IDCount;
+                    p.IDCountBox = IDCount_box;
+                    p.BoxCurrent = Box_curent;
+                    p.TimeCycleActual = TimeCycleActual;
+                    p.TimeValue = new string[10];
+                    for (int index = 0; index < 10; index++)
+                    {
+                        p.TimeValue[index] = "0";
+                    }
+                    DataProvider.Instance.PassRates.Insert(p);
                 }
             }
         }
@@ -601,7 +557,7 @@ namespace Line_Production
             }
             catch (Exception)
             {
-                
+
             }
             // Repository.UpdatateData(entities)
             SetupDisplay();
@@ -952,29 +908,6 @@ namespace Line_Production
             }
         }
 
-        private void btDTle_Click(object sender, EventArgs e)
-        {
-            var resuflt = MessageBox.Show("Bạn có chắc muốn đóng thùng lẻ?", "Infomation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (resuflt == DialogResult.Yes)
-            {
-                if (IDCount != 0)
-                    IDCount_box += 1;
-                IDCount = 0;
-                Box_curent = "";
-                txtSerial.Enabled = false;
-                TextMacBox.Enabled = true;
-                TextMacBox.Focus();
-                TextMacBox.SelectAll();
-                LabelSoThung.Text = IDCount_box.ToString();
-                LabelPCBA.Text = IDCount.ToString();
-                RecordProduction();
-            }
-            else
-            {
-                txtSerial.Focus();
-            }
-        }
-
         private void Timer2_Tick(object sender, EventArgs e)
         {
             TimePauseLine = TimePauseLine + 1;
@@ -1006,7 +939,7 @@ namespace Line_Production
 
         private void txtSearch_KeyPress(object sender, KeyPressEventArgs e)
         {
-            
+
         }
 
 

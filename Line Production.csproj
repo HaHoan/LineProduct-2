@@ -112,10 +112,12 @@
     <Compile Include="Database\DBUtils.cs" />
     <Compile Include="Database\HondaLocks.cs" />
     <Compile Include="Database\ModelQuantities.cs" />
+    <Compile Include="Database\PassRates.cs" />
     <Compile Include="Database\TimeLines.cs" />
     <Compile Include="Entities\HondaLock.cs" />
     <Compile Include="Entities\Model.cs" />
     <Compile Include="Entities\Online.cs" />
+    <Compile Include="Entities\PassRate.cs" />
     <Compile Include="Entities\TimeLine.cs" />
     <Compile Include="fmLogin.cs">
       <SubType>Form</SubType>

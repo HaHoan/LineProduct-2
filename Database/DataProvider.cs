@@ -40,6 +40,7 @@ namespace Line_Production.Database
                 HondaLocks = new HondaLocks();
                 ModelQuantities = new ModelQuantities();
                 TimeLines = new TimeLines();
+                PassRates = new PassRates();
                 Console.WriteLine("Connection successful!");
             }
             catch (Exception e)
@@ -53,6 +54,7 @@ namespace Line_Production.Database
 
         public ModelQuantities ModelQuantities { get; set; }
         public TimeLines TimeLines { get; set; }
+        public PassRates PassRates { get; set; }
 
         ~DataProvider()
         {

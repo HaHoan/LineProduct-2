@@ -12,8 +12,8 @@ namespace Line_Production
     {
         // bien quy dinh duong dan file
         public static string PathApplication = Application.StartupPath;
-        public static string PathPassrate = PathApplication + @"\Passrate";
         public static bool waitWipConfirm = true;
+        public static string PathPassrate = PathApplication + @"\Passrate";
         public static string PathConfig = @"SOFTWARE\LINEPRODUCTION\Configs";
         public static string pathBackup = string.Empty;
         public static string pathWip = string.Empty;

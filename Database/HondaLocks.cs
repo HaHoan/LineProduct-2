@@ -18,6 +18,7 @@ namespace Line_Production.Database
             {
                 using (SqlCommand cmd = new SqlCommand("insert into HondaLock(ProductionID,BoxID,BoardNo,UpdateTime,Status,Updator_Code,Updator_Name) values(@ProductionID,@BoxID,@BoardNo,@UpdateTime,@Status,@Updator_Code,@Updator_Name);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                 {
+
                     cmd.Parameters.AddWithValue("@ProductionID", (o as HondaLock).ProductionID);
                     cmd.Parameters.AddWithValue("@BoxID", (o as HondaLock).BoxID);
                     cmd.Parameters.AddWithValue("@BoardNo", (o as HondaLock).BoardNo);
