@@ -12,11 +12,12 @@ namespace Line_Production.Database
 
     public class HondaLocks
     {
+        public const string TABLE = "LINE_HONDALOCK";
         public object Insert(object o)
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("insert into HondaLock(ProductionID,BoxID,BoardNo,UpdateTime,Status,Updator_Code,Updator_Name) values(@ProductionID,@BoxID,@BoardNo,@UpdateTime,@Status,@Updator_Code,@Updator_Name);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("insert into " + TABLE + "(ProductionID,BoxID,BoardNo,UpdateTime,Status,Updator_Code,Updator_Name) values(@ProductionID,@BoxID,@BoardNo,@UpdateTime,@Status,@Updator_Code,@Updator_Name);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                 {
 
                     cmd.Parameters.AddWithValue("@ProductionID", (o as HondaLock).ProductionID);
@@ -42,7 +43,7 @@ namespace Line_Production.Database
             var list = new List<int>();
             try
             {
-                string sql = "select * from HondaLock where BoardNo = '" + banmach + "';";
+                string sql = "select * from " + TABLE + " where BoardNo = '" + banmach + "';";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())
@@ -65,7 +66,7 @@ namespace Line_Production.Database
         {
             try
             {
-                string sql = "select count(BoxID) from HondaLock where ProductionID = '" + Model + "' and BoxID = '" + mathung + "'";
+                string sql = "select count(BoxID) from " + TABLE + " where ProductionID = '" + Model + "' and BoxID = '" + mathung + "'";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
                 int count = Convert.ToInt32(command.ExecuteScalar());
                 return count;
@@ -81,7 +82,7 @@ namespace Line_Production.Database
         {
             try
             {
-                string sql = "select count(BoxID) from (select BoxID,count(*) sothung from HondaLock where ProductionID = '" + Model + "' group by BoxID) as thungdadem";
+                string sql = "select count(BoxID) from (select BoxID,count(*) sothung from " + TABLE + " where ProductionID = '" + Model + "' group by BoxID) as thungdadem";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
                 Int32 count = Convert.ToInt32(command.ExecuteScalar());
                 return count;
@@ -98,7 +99,7 @@ namespace Line_Production.Database
             var list = new List<Tuple<string, string>>();
             try
             {
-                string sql = "select BoxID, BoardNo from HondaLock where BoardNo = '" + serial + "';";
+                string sql = "select BoxID, BoardNo from " + TABLE + " where BoardNo = '" + serial + "';";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())

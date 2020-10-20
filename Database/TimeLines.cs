@@ -11,13 +11,16 @@ namespace Line_Production.Database
 {
     public class TimeLines
     {
+        public const string TIME = "LINE_TIME";
+        public const string TIMELINE = "LINE_TIMELINE";
+
         public TimeLine Insert(TimeLine o)
         {
             try
             {
-                if(IsExist(o.IdTimeLine, o.TimeIndex) > 0)
+                if (IsExist(o.IdTimeLine, o.TimeIndex) > 0)
                 {
-                    using (SqlCommand cmd = new SqlCommand("update TimeLine set IdTimeLine = @IdTimeLine,TimeIndex = @TimeIndex,TimeFrom = @TimeFrom,TimeTo = @TimeTo where IdTimeLine = "+o.IdTimeLine+" and TimeIndex = "+o.TimeIndex, DataProvider.Instance.DB))
+                    using (SqlCommand cmd = new SqlCommand("update " + TIMELINE + " set IdTimeLine = @IdTimeLine,TimeIndex = @TimeIndex,TimeFrom = @TimeFrom,TimeTo = @TimeTo where IdTimeLine = " + o.IdTimeLine + " and TimeIndex = " + o.TimeIndex, DataProvider.Instance.DB))
                     {
                         cmd.Parameters.AddWithValue("@IdTimeLine", (o as TimeLine).IdTimeLine);
                         cmd.Parameters.AddWithValue("@TimeIndex", (o as TimeLine).TimeIndex);
@@ -29,7 +32,7 @@ namespace Line_Production.Database
                 }
                 else
                 {
-                    using (SqlCommand cmd = new SqlCommand("insert into TimeLine(IdTimeLine,TimeIndex,TimeFrom,TimeTo) values(@IdTimeLine,@TimeIndex,@TimeFrom,@TimeTo);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
+                    using (SqlCommand cmd = new SqlCommand("insert into " + TIMELINE + "(IdTimeLine,TimeIndex,TimeFrom,TimeTo) values(@IdTimeLine,@TimeIndex,@TimeFrom,@TimeTo);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                     {
                         cmd.Parameters.AddWithValue("@IdTimeLine", (o as TimeLine).IdTimeLine);
                         cmd.Parameters.AddWithValue("@TimeIndex", (o as TimeLine).TimeIndex);
@@ -53,7 +56,7 @@ namespace Line_Production.Database
                 int rsDay = 0, rsNight = 0;
                 if (SelectIdLine(CaSX.DAY, line) == 0)
                 {
-                    using (SqlCommand cmd = new SqlCommand("insert into Time(Line,Type) values(@Line,@Type);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
+                    using (SqlCommand cmd = new SqlCommand("insert into " + TIME + "(Line,Type) values(@Line,@Type);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                     {
                         cmd.Parameters.AddWithValue("@Line", line);
                         cmd.Parameters.AddWithValue("@Type", CaSX.DAY);
@@ -63,7 +66,7 @@ namespace Line_Production.Database
                 else rsDay = 1;
                 if (SelectIdLine(CaSX.NIGHT, line) == 0)
                 {
-                    using (SqlCommand cmd = new SqlCommand("insert into Time(Line,Type) values(@Line,@Type);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
+                    using (SqlCommand cmd = new SqlCommand("insert into " + TIME + "(Line,Type) values(@Line,@Type);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                     {
                         cmd.Parameters.AddWithValue("@Line", line);
                         cmd.Parameters.AddWithValue("@Type", CaSX.NIGHT);
@@ -83,7 +86,7 @@ namespace Line_Production.Database
         {
             try
             {
-                string sql = "select * from Time where Type = '" + caSX + "' and Line = '" + line + "'";
+                string sql = "select * from " + TIME + " where Type = '" + caSX + "' and Line = '" + line + "'";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())
@@ -111,7 +114,7 @@ namespace Line_Production.Database
         {
             try
             {
-                string sql = "select count(IdTimeLine) total from TimeLine where IdTimeLine = " + IdTimeLine + " and TimeIndex = "+TimeIndex;
+                string sql = "select count(IdTimeLine) total from " + TIMELINE + " where IdTimeLine = " + IdTimeLine + " and TimeIndex = " + TimeIndex;
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())
@@ -140,7 +143,7 @@ namespace Line_Production.Database
             var list = new List<string>();
             try
             {
-                string sql = "select * from Time where Type = '" + type + "'";
+                string sql = "select * from " + TIME + " where Type = '" + type + "'";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())
@@ -170,7 +173,7 @@ namespace Line_Production.Database
             var list = new List<TimeLine>();
             try
             {
-                string sql = "select * from TimeLine  where IdTimeLine  in (select Id from Time where Line = '" + line + "' and Type = " + type + ")";
+                string sql = "select * from " + TIMELINE + "  where IdTimeLine  in (select Id from " + TIME + " where Line = '" + line + "' and Type = " + type + ")";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())

@@ -1054,7 +1054,7 @@ namespace Line_Production
         {
             // Repository = New Repository
             pvsservice = new PVSReference.PVSWebServiceSoapClient();
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(txtSerial.Text))
             {
                 if (Strings.Mid(txtSerial.Text, ModelRevPosition, ModelRev.Length) == ModelRev)
                 {

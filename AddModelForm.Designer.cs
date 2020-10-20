@@ -37,11 +37,11 @@
             this.txbWarmQuatity = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txbMnQuantity = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.txbRegex = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.ckbUseBarcode = new System.Windows.Forms.CheckBox();
             this.btnSaveChanged = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -55,16 +55,16 @@
             // 
             // txbModelID
             // 
-            this.txbModelID.Location = new System.Drawing.Point(96, 20);
+            this.txbModelID.Location = new System.Drawing.Point(154, 20);
             this.txbModelID.Name = "txbModelID";
-            this.txbModelID.Size = new System.Drawing.Size(230, 20);
+            this.txbModelID.Size = new System.Drawing.Size(172, 20);
             this.txbModelID.TabIndex = 1;
             // 
             // txbPersonInLine
             // 
-            this.txbPersonInLine.Location = new System.Drawing.Point(124, 65);
+            this.txbPersonInLine.Location = new System.Drawing.Point(154, 65);
             this.txbPersonInLine.Name = "txbPersonInLine";
-            this.txbPersonInLine.Size = new System.Drawing.Size(202, 20);
+            this.txbPersonInLine.Size = new System.Drawing.Size(172, 20);
             this.txbPersonInLine.TabIndex = 3;
             // 
             // label2
@@ -78,9 +78,9 @@
             // 
             // txbCycle
             // 
-            this.txbCycle.Location = new System.Drawing.Point(96, 112);
+            this.txbCycle.Location = new System.Drawing.Point(154, 112);
             this.txbCycle.Name = "txbCycle";
-            this.txbCycle.Size = new System.Drawing.Size(230, 20);
+            this.txbCycle.Size = new System.Drawing.Size(172, 20);
             this.txbCycle.TabIndex = 5;
             // 
             // label3
@@ -94,9 +94,9 @@
             // 
             // txbWarmQuatity
             // 
-            this.txbWarmQuatity.Location = new System.Drawing.Point(124, 161);
+            this.txbWarmQuatity.Location = new System.Drawing.Point(154, 161);
             this.txbWarmQuatity.Name = "txbWarmQuatity";
-            this.txbWarmQuatity.Size = new System.Drawing.Size(202, 20);
+            this.txbWarmQuatity.Size = new System.Drawing.Size(172, 20);
             this.txbWarmQuatity.TabIndex = 7;
             // 
             // label4
@@ -110,25 +110,16 @@
             // 
             // txbMnQuantity
             // 
-            this.txbMnQuantity.Location = new System.Drawing.Point(181, 208);
+            this.txbMnQuantity.Location = new System.Drawing.Point(154, 208);
             this.txbMnQuantity.Name = "txbMnQuantity";
-            this.txbMnQuantity.Size = new System.Drawing.Size(145, 20);
+            this.txbMnQuantity.Size = new System.Drawing.Size(172, 20);
             this.txbMnQuantity.TabIndex = 9;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(25, 211);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(150, 13);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Cảnh báo số lượng bất thường";
             // 
             // txbRegex
             // 
-            this.txbRegex.Location = new System.Drawing.Point(96, 249);
+            this.txbRegex.Location = new System.Drawing.Point(154, 249);
             this.txbRegex.Name = "txbRegex";
-            this.txbRegex.Size = new System.Drawing.Size(230, 20);
+            this.txbRegex.Size = new System.Drawing.Size(172, 20);
             this.txbRegex.TabIndex = 11;
             // 
             // label6
@@ -170,6 +161,15 @@
             this.btnSaveChanged.UseVisualStyleBackColor = false;
             this.btnSaveChanged.Click += new System.EventHandler(this.btnSaveChanged_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(25, 211);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(123, 13);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Cảnh báo SL bất thường";
+            // 
             // AddModelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -208,10 +208,10 @@
         private System.Windows.Forms.TextBox txbWarmQuatity;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txbMnQuantity;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txbRegex;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox ckbUseBarcode;
         private System.Windows.Forms.Button btnSaveChanged;
+        private System.Windows.Forms.Label label5;
     }
 }

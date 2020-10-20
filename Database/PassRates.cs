@@ -12,11 +12,12 @@ namespace Line_Production.Database
 {
     public class PassRates
     {
+        public const string TABLE = "LINE_PASSRATE";
         public PassRate Update(PassRate o)
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("update PassRate set ProductionID = @ProductionID, ProductPlan = @ProductPlan,Actual = @Actual,Time = @Time,Line = @Line,IDCount = @IDCount, IDCountBox = @IDCountBox, BoxCurrent = @BoxCurrent,TimeCycleActual = @TimeCycleActual, TimeValue = @TimeValue where Id = '" + o.Id + "'", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("update " + TABLE + " set ProductionID = @ProductionID, ProductPlan = @ProductPlan,Actual = @Actual,Time = @Time,Line = @Line,IDCount = @IDCount, IDCountBox = @IDCountBox, BoxCurrent = @BoxCurrent,TimeCycleActual = @TimeCycleActual, TimeValue = @TimeValue where Id = '" + o.Id + "'", DataProvider.Instance.DB))
                 {
 
                     cmd.Parameters.Add("@Id", SqlDbType.Int);
@@ -63,7 +64,7 @@ namespace Line_Production.Database
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("insert into PassRate(ProductionID,ProductPlan,Actual,Time,Line,IDCount,IDCountBox,BoxCurrent,TimeCycleActual,TimeValue) values(@ProductionID,@ProductPlan,@Actual,@Time,@Line,@IDCount,@IDCountBox,@BoxCurrent,@TimeCycleActual,@TimeValue); SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("insert into " + TABLE + "(ProductionID,ProductPlan,Actual,Time,Line,IDCount,IDCountBox,BoxCurrent,TimeCycleActual,TimeValue) values(@ProductionID,@ProductPlan,@Actual,@Time,@Line,@IDCount,@IDCountBox,@BoxCurrent,@TimeCycleActual,@TimeValue); SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                 {
                     cmd.Parameters.AddWithValue("@ProductionID", o.ProductionID);
                     cmd.Parameters.AddWithValue("@ProductPlan", o.ProductPlan);
@@ -97,7 +98,7 @@ namespace Line_Production.Database
         {
             try
             {
-                string sql = "select * from PassRate where ProductionID = '" + modelId + "' and Line = '" + line + "' and Time = '" + time + "'";
+                string sql = "select * from " + TABLE + " where ProductionID = '" + modelId + "' and Line = '" + line + "' and Time = '" + time + "'";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())

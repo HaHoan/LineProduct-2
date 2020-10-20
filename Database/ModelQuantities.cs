@@ -12,11 +12,12 @@ namespace Line_Production.Database
 {
     public class ModelQuantities
     {
+        public const string TABLE = "LINE_MODEL";
         public object Insert(object o)
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("insert into ModelQuantity(Model,PersonPerLine,CycleTime,WarnQuantity,MinQuantity,CharModel,UseBarcode) values(@Model, @PersonPerLine, @CycleTime, @WarnQuantity, @MinQuantity, @CharModel,@UseBarcode); SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("insert into " + TABLE + "(Model,PersonPerLine,CycleTime,WarnQuantity,MinQuantity,CharModel,UseBarcode) values(@Model, @PersonPerLine, @CycleTime, @WarnQuantity, @MinQuantity, @CharModel,@UseBarcode); SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                 {
                     cmd.Parameters.AddWithValue("@Model", (o as Model).ModelID);
                     cmd.Parameters.AddWithValue("@PersonPerLine", (o as Model).PersonInLine);
@@ -25,7 +26,7 @@ namespace Line_Production.Database
                     cmd.Parameters.AddWithValue("@MinQuantity", (o as Model).MinQuantity);
                     cmd.Parameters.AddWithValue("@CharModel", (o as Model).CharModel);
                     cmd.Parameters.AddWithValue("@UseBarcode", (o as Model).UseBarcode);
-                    
+
                     (o as Model).Id = (int)cmd.ExecuteScalar();
                     return o;
                 }
@@ -41,7 +42,7 @@ namespace Line_Production.Database
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("update ModelQuantity set Model = @Model, PersonPerLine = @PersonPerLine, CycleTime = @CycleTime, WarnQuantity = @WarnQuantity, MinQuantity = @MinQuantity, CharModel = @CharModel,UseBarcode = @UseBarcode where Id = '"+o.Id+"'", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("update " + TABLE + " set Model = @Model, PersonPerLine = @PersonPerLine, CycleTime = @CycleTime, WarnQuantity = @WarnQuantity, MinQuantity = @MinQuantity, CharModel = @CharModel,UseBarcode = @UseBarcode where Id = '" + o.Id + "'", DataProvider.Instance.DB))
                 {
                     cmd.Parameters.AddWithValue("@Model", (o as Model).ModelID);
                     cmd.Parameters.AddWithValue("@PersonPerLine", (o as Model).PersonInLine);
@@ -67,7 +68,7 @@ namespace Line_Production.Database
             var list = new List<Model>();
             try
             {
-                string sql = "select * from ModelQuantity";
+                string sql = "select * from " + TABLE;
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())
@@ -104,7 +105,7 @@ namespace Line_Production.Database
         {
             try
             {
-                string sql = "select * from ModelQuantity where Model = '" + ModelID + "'";
+                string sql = "select * from " + TABLE + " where Model = '" + ModelID + "'";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())
@@ -142,7 +143,7 @@ namespace Line_Production.Database
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("delete from ModelQuantity where Model = @Model", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("delete from " + TABLE + " where Model = @Model", DataProvider.Instance.DB))
                 {
                     cmd.Parameters.Add("@Model", SqlDbType.NVarChar);
                     cmd.Parameters["@Model"].Value = Model;
