@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Line_Production.Database;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,16 @@ namespace Line_Production
 {
     public partial class ResultForm : Form
     {
-        public ResultForm()
+        public ResultForm(string text)
         {
             InitializeComponent();
+            SetUpData(text);
+        }
+
+        private void SetUpData(string text)
+        {
+            var list = DataProvider.Instance.HondaLocks.SearchSerial(text);
+            dgrvSearch.DataSource = list;
         }
     }
 }

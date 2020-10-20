@@ -138,6 +138,7 @@ namespace Line_Production
         public bool CheckModelList()
         {
             var list = DataProvider.Instance.ModelQuantities.Select();
+            if (list == null) return false;
             foreach (var model in list)
             {
                 cbbModel.Items.Add(model.ModelID);

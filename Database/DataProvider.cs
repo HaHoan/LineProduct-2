@@ -35,12 +35,13 @@ namespace Line_Production.Database
             DB = DBUtils.GetDBConnection();
             try
             {
-                Console.WriteLine("Openning Connection ...");
-                DB.Open();
                 HondaLocks = new HondaLocks();
                 ModelQuantities = new ModelQuantities();
                 TimeLines = new TimeLines();
                 PassRates = new PassRates();
+                Console.WriteLine("Openning Connection ...");
+                DB.Open();
+               
                 Console.WriteLine("Connection successful!");
             }
             catch (Exception e)

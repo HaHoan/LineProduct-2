@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Line_Production.Database
 {
-   
+
     public class HondaLocks
     {
         public object Insert(object o)
@@ -42,7 +42,7 @@ namespace Line_Production.Database
             var list = new List<int>();
             try
             {
-                string sql = "select * from HondaLock where BoxID = '" + mathung + "' and BoardNo = '" + banmach + "';";
+                string sql = "select * from HondaLock where BoardNo = '" + banmach + "';";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())
@@ -93,5 +93,37 @@ namespace Line_Production.Database
             }
         }
 
+        public List<Tuple<string, string>> SearchSerial(string serial)
+        {
+            var list = new List<Tuple<string, string>>();
+            try
+            {
+                string sql = "select BoxID, BoardNo from HondaLock where BoardNo = '" + serial + "';";
+                SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
+
+                using (DbDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+
+                        while (reader.Read())
+                        {
+                            string BoxID = reader[reader.GetOrdinal("BoxID")] as string;
+                            string BoardNo = reader[reader.GetOrdinal("BoardNo")] as string;
+                            var hondaLock = Tuple.Create(BoxID, BoardNo);
+                            list.Add(hondaLock);
+                        }
+
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message.ToString());
+                return null;
+            }
+            return list;
+        }
     }
 }

@@ -34,61 +34,55 @@ namespace Line_Production
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            dgv = new System.Windows.Forms.DataGridView();
-            _no = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            _macBox = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            _id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)dgv).BeginInit();
+            this.dgrvSearch = new System.Windows.Forms.DataGridView();
+            this._macBox = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this._id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dgrvSearch)).BeginInit();
             this.SuspendLayout();
             // 
-            // dgv
+            // dgrvSearch
             // 
-            dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { _no, _macBox, _id });
-            dgv.Dock = System.Windows.Forms.DockStyle.Fill;
-            dgv.Location = new System.Drawing.Point(0, 0);
-            dgv.Name = "dgv";
-            dgv.Size = new System.Drawing.Size(841, 721);
-            dgv.TabIndex = 0;
-            // 
-            // _no
-            // 
-            _no.DataPropertyName = "_no";
-            _no.HeaderText = "No";
-            _no.Name = "_no";
-            _no.ReadOnly = true;
+            this.dgrvSearch.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgrvSearch.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this._macBox,
+            this._id});
+            this.dgrvSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgrvSearch.Location = new System.Drawing.Point(0, 0);
+            this.dgrvSearch.Name = "dgrvSearch";
+            this.dgrvSearch.Size = new System.Drawing.Size(841, 721);
+            this.dgrvSearch.TabIndex = 0;
             // 
             // _macBox
             // 
-            _macBox.DataPropertyName = "_macBox";
-            _macBox.HeaderText = "Mac box";
-            _macBox.Name = "_macBox";
-            _macBox.ReadOnly = true;
-            _macBox.Width = 300;
+            this._macBox.DataPropertyName = "Item1";
+            this._macBox.HeaderText = "Mac box";
+            this._macBox.Name = "_macBox";
+            this._macBox.ReadOnly = true;
+            this._macBox.Width = 300;
             // 
             // _id
             // 
-            _id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            _id.DataPropertyName = "_id";
-            _id.HeaderText = "ID";
-            _id.Name = "_id";
-            _id.ReadOnly = true;
+            this._id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this._id.DataPropertyName = "Item2";
+            this._id.HeaderText = "Serial";
+            this._id.Name = "_id";
+            this._id.ReadOnly = true;
             // 
             // ResultForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6.0f, 13.0f);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(841, 721);
-            this.Controls.Add(dgv);
+            this.Controls.Add(this.dgrvSearch);
             this.Name = "ResultForm";
             this.Text = "Result";
-            ((System.ComponentModel.ISupportInitialize)dgv).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgrvSearch)).EndInit();
             this.ResumeLayout(false);
+
         }
 
-        internal DataGridView dgv;
-        internal DataGridViewTextBoxColumn _no;
-        internal DataGridViewTextBoxColumn _macBox;
-        internal DataGridViewTextBoxColumn _id;
+        internal DataGridView dgrvSearch;
+        private DataGridViewTextBoxColumn _macBox;
+        private DataGridViewTextBoxColumn _id;
     }
 }

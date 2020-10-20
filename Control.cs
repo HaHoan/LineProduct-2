@@ -203,7 +203,7 @@ namespace Line_Production
             }
             else
             {
-                MessageBox.Show("File Setup List Model Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Setup List Model Not Found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
 
@@ -1283,6 +1283,21 @@ namespace Line_Production
         {
             var timeLine = new TimeDetailForm();
             timeLine.ShowDialog();
+        }
+
+        private void txtSearch_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                var text = txtSearch.Text;
+                if (!string.IsNullOrEmpty(text))
+                {
+                    new ResultForm(text).ShowDialog();
+                }
+
+            }
+
         }
     }
 }
