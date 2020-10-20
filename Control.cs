@@ -103,7 +103,7 @@ namespace Line_Production
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            FileShare.Connect(FileShare.PATH, new System.Net.NetworkCredential(FileShare.USER, FileShare.PASSWORD));
             Loadsetting();
             // Me.Height = 885
 

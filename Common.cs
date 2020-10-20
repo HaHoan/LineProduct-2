@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
+using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
 
@@ -118,6 +120,93 @@ namespace Line_Production
                 return false;
             }
 
+        }
+    }
+
+    public static class FileShare
+    {
+        public static string PASSWORD = "umcvn";
+        public static string USER = @"VN\Scanner";
+        public static string PATH = @"\\172.28.10.12";
+
+        [DllImport("mpr.dll")]
+        private static extern int WNetAddConnection2(NetResource netResource,
+        string password, string username, int flags);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public class NetResource
+        {
+            public ResourceScope Scope;
+            public ResourceType ResourceType;
+            public ResourceDisplaytype DisplayType;
+            public int Usage;
+            public string LocalName;
+            public string RemoteName;
+            public string Comment;
+            public string Provider;
+        }
+
+        public enum ResourceScope : int
+        {
+            Connected = 1,
+            GlobalNetwork,
+            Remembered,
+            Recent,
+            Context
+        };
+
+        public enum ResourceType : int
+        {
+            Any = 0,
+            Disk = 1,
+            Print = 2,
+            Reserved = 8,
+        }
+
+        public enum ResourceDisplaytype : int
+        {
+            Generic = 0x0,
+            Domain = 0x01,
+            Server = 0x02,
+            Share = 0x03,
+            File = 0x04,
+            Group = 0x05,
+            Network = 0x06,
+            Root = 0x07,
+            Shareadmin = 0x08,
+            Directory = 0x09,
+            Tree = 0x0a,
+            Ndscontainer = 0x0b
+        }
+        public static bool Connect(string networkName, NetworkCredential credentials)
+        {
+            try
+            {
+                var netResource = new NetResource
+                {
+                    Scope = ResourceScope.GlobalNetwork,
+                    ResourceType = ResourceType.Disk,
+                    DisplayType = ResourceDisplaytype.Share,
+                    RemoteName = networkName
+                };
+
+                var userName = string.IsNullOrEmpty(credentials.Domain)
+                    ? credentials.UserName
+                    : string.Format(@"{0}\{1}", credentials.Domain, credentials.UserName);
+
+                var result = WNetAddConnection2(
+                    netResource,
+                    credentials.Password,
+                    userName,
+                    0);
+
+                return result == 0;
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.ToString());
+                return false;
+            }
         }
     }
 }
