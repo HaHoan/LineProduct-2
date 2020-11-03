@@ -3,6 +3,64 @@
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
       <s:import namespace="http://microsoft.com/wsdl/types/" />
+      <s:element name="GetWorkOrdersByOrderNo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="orderNo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetWorkOrdersByOrderNoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetWorkOrdersByOrderNoResult" type="tns:WORK_ORDERSEntity" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="WORK_ORDERSEntity">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BaseEntity">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="CLIENT_NAME" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="CREATE_TIME" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="CREATOR_NAME" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CUSTOMER_ID" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="DEFECT_QUANTITY" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="DISASSEMBLING_COUNT" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="DISCARD_QUANTITY" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="FINISH_TIME" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="FINISHED_QUANTITY" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="ID" type="s1:guid" />
+              <s:element minOccurs="1" maxOccurs="1" name="INCOMING_DEFECT_QUANTITY" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="INITIATED_QUANTITY" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="IS_FINISHED" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="IS_STARTED" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="IS_USING_DISASSEMBLING" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="IS_USING_MATERIAL_IMPORTING" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="IS_USING_PACKING" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="IS_USING_TRANSPOSING" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="IS_USING_UNIQUE_PACK_NO" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="LOT_NO" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="MATERIAL_ORDER_CAPACITY" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="MATERIAL_ORDER_NO" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ORDER_NO" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="PACKING_CAPACITY" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="PLANT" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PROCESS_NO" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PRODUCT_ID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PRODUCTION_ORDER_ID" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="QUANTITY" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="REMARKS" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="SECTION" type="s:int" />
+              <s:element minOccurs="1" maxOccurs="1" name="START_TIME" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="UPDATE_TIME" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="UPDATER_NAME" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="SAMPLE_QUANTITY" type="s:double" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="BaseEntity" />
       <s:element name="GetMac">
         <s:complexType>
           <s:sequence>
@@ -27,7 +85,6 @@
           </s:extension>
         </s:complexContent>
       </s:complexType>
-      <s:complexType name="BaseEntity" />
       <s:element name="KyoGetMac">
         <s:complexType>
           <s:sequence>
@@ -368,6 +425,24 @@
           </s:extension>
         </s:complexContent>
       </s:complexType>
+      <s:element name="GetScanningLogsWithParam">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="boardNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="orderNo" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="orderId" nillable="true" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="productId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cus" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetScanningLogsWithParamResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetScanningLogsWithParamResult" type="tns:ArrayOfSCANNING_LOGSEntity" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="GetScanningLogsByQuery">
         <s:complexType>
           <s:sequence>
@@ -720,6 +795,22 @@
           <s:element minOccurs="0" maxOccurs="unbounded" name="MATERIAL_ORDERSEntity" nillable="true" type="tns:MATERIAL_ORDERSEntity" />
         </s:sequence>
       </s:complexType>
+      <s:element name="GetMaterialWithParam">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="isFinish" nillable="true" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="isStart" nillable="true" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="isReady" nillable="true" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMaterialWithParamResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMaterialWithParamResult" type="tns:ArrayOfMATERIAL_ORDERSEntity" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="GetLineStartByLineIdJson">
         <s:complexType>
           <s:sequence>
@@ -1032,6 +1123,25 @@
           </s:extension>
         </s:complexContent>
       </s:complexType>
+      <s:element name="GetOperationLogs">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="materialOrderID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="productId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cus" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="lineID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="orderNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="task" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOperationLogsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOperationLogsResult" type="tns:ArrayOfOPERATION_LOGSEntity" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="GetWorkOrderProcedure">
         <s:complexType>
           <s:sequence>
@@ -1158,6 +1268,12 @@
       </s:simpleType>
     </s:schema>
   </wsdl:types>
+  <wsdl:message name="GetWorkOrdersByOrderNoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetWorkOrdersByOrderNo" />
+  </wsdl:message>
+  <wsdl:message name="GetWorkOrdersByOrderNoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetWorkOrdersByOrderNoResponse" />
+  </wsdl:message>
   <wsdl:message name="GetMacSoapIn">
     <wsdl:part name="parameters" element="tns:GetMac" />
   </wsdl:message>
@@ -1254,6 +1370,12 @@
   <wsdl:message name="GetScanningLogsByBoardNoSoapOut">
     <wsdl:part name="parameters" element="tns:GetScanningLogsByBoardNoResponse" />
   </wsdl:message>
+  <wsdl:message name="GetScanningLogsWithParamSoapIn">
+    <wsdl:part name="parameters" element="tns:GetScanningLogsWithParam" />
+  </wsdl:message>
+  <wsdl:message name="GetScanningLogsWithParamSoapOut">
+    <wsdl:part name="parameters" element="tns:GetScanningLogsWithParamResponse" />
+  </wsdl:message>
   <wsdl:message name="GetScanningLogsByQuerySoapIn">
     <wsdl:part name="parameters" element="tns:GetScanningLogsByQuery" />
   </wsdl:message>
@@ -1344,6 +1466,12 @@
   <wsdl:message name="MaterialAllLinesStartedSoapOut">
     <wsdl:part name="parameters" element="tns:MaterialAllLinesStartedResponse" />
   </wsdl:message>
+  <wsdl:message name="GetMaterialWithParamSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMaterialWithParam" />
+  </wsdl:message>
+  <wsdl:message name="GetMaterialWithParamSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMaterialWithParamResponse" />
+  </wsdl:message>
   <wsdl:message name="GetLineStartByLineIdJsonSoapIn">
     <wsdl:part name="parameters" element="tns:GetLineStartByLineIdJson" />
   </wsdl:message>
@@ -1416,6 +1544,12 @@
   <wsdl:message name="MaterialGetOperationLogsSoapOut">
     <wsdl:part name="parameters" element="tns:MaterialGetOperationLogsResponse" />
   </wsdl:message>
+  <wsdl:message name="GetOperationLogsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetOperationLogs" />
+  </wsdl:message>
+  <wsdl:message name="GetOperationLogsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetOperationLogsResponse" />
+  </wsdl:message>
   <wsdl:message name="GetWorkOrderProcedureSoapIn">
     <wsdl:part name="parameters" element="tns:GetWorkOrderProcedure" />
   </wsdl:message>
@@ -1435,6 +1569,10 @@
     <wsdl:part name="parameters" element="tns:GetRoleMemberResponse" />
   </wsdl:message>
   <wsdl:portType name="PVSWebServiceSoap">
+    <wsdl:operation name="GetWorkOrdersByOrderNo">
+      <wsdl:input message="tns:GetWorkOrdersByOrderNoSoapIn" />
+      <wsdl:output message="tns:GetWorkOrdersByOrderNoSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetMac">
       <wsdl:input message="tns:GetMacSoapIn" />
       <wsdl:output message="tns:GetMacSoapOut" />
@@ -1499,6 +1637,10 @@
       <wsdl:input message="tns:GetScanningLogsByBoardNoSoapIn" />
       <wsdl:output message="tns:GetScanningLogsByBoardNoSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetScanningLogsWithParam">
+      <wsdl:input message="tns:GetScanningLogsWithParamSoapIn" />
+      <wsdl:output message="tns:GetScanningLogsWithParamSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetScanningLogsByQuery">
       <wsdl:input message="tns:GetScanningLogsByQuerySoapIn" />
       <wsdl:output message="tns:GetScanningLogsByQuerySoapOut" />
@@ -1559,6 +1701,10 @@
       <wsdl:input message="tns:MaterialAllLinesStartedSoapIn" />
       <wsdl:output message="tns:MaterialAllLinesStartedSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetMaterialWithParam">
+      <wsdl:input message="tns:GetMaterialWithParamSoapIn" />
+      <wsdl:output message="tns:GetMaterialWithParamSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetLineStartByLineIdJson">
       <wsdl:input message="tns:GetLineStartByLineIdJsonSoapIn" />
       <wsdl:output message="tns:GetLineStartByLineIdJsonSoapOut" />
@@ -1607,6 +1753,10 @@
       <wsdl:input message="tns:MaterialGetOperationLogsSoapIn" />
       <wsdl:output message="tns:MaterialGetOperationLogsSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetOperationLogs">
+      <wsdl:input message="tns:GetOperationLogsSoapIn" />
+      <wsdl:output message="tns:GetOperationLogsSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetWorkOrderProcedure">
       <wsdl:input message="tns:GetWorkOrderProcedureSoapIn" />
       <wsdl:output message="tns:GetWorkOrderProcedureSoapOut" />
@@ -1622,6 +1772,15 @@
   </wsdl:portType>
   <wsdl:binding name="PVSWebServiceSoap" type="tns:PVSWebServiceSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetWorkOrdersByOrderNo">
+      <soap:operation soapAction="http://tempuri.org/GetWorkOrdersByOrderNo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetMac">
       <soap:operation soapAction="http://tempuri.org/GetMac" style="document" />
       <wsdl:input>
@@ -1766,6 +1925,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetScanningLogsWithParam">
+      <soap:operation soapAction="http://tempuri.org/GetScanningLogsWithParam" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetScanningLogsByQuery">
       <soap:operation soapAction="http://tempuri.org/GetScanningLogsByQuery" style="document" />
       <wsdl:input>
@@ -1901,6 +2069,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetMaterialWithParam">
+      <soap:operation soapAction="http://tempuri.org/GetMaterialWithParam" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetLineStartByLineIdJson">
       <soap:operation soapAction="http://tempuri.org/GetLineStartByLineIdJson" style="document" />
       <wsdl:input>
@@ -2009,6 +2186,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetOperationLogs">
+      <soap:operation soapAction="http://tempuri.org/GetOperationLogs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetWorkOrderProcedure">
       <soap:operation soapAction="http://tempuri.org/GetWorkOrderProcedure" style="document" />
       <wsdl:input>
@@ -2039,6 +2225,15 @@
   </wsdl:binding>
   <wsdl:binding name="PVSWebServiceSoap12" type="tns:PVSWebServiceSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetWorkOrdersByOrderNo">
+      <soap12:operation soapAction="http://tempuri.org/GetWorkOrdersByOrderNo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetMac">
       <soap12:operation soapAction="http://tempuri.org/GetMac" style="document" />
       <wsdl:input>
@@ -2183,6 +2378,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetScanningLogsWithParam">
+      <soap12:operation soapAction="http://tempuri.org/GetScanningLogsWithParam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetScanningLogsByQuery">
       <soap12:operation soapAction="http://tempuri.org/GetScanningLogsByQuery" style="document" />
       <wsdl:input>
@@ -2318,6 +2522,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetMaterialWithParam">
+      <soap12:operation soapAction="http://tempuri.org/GetMaterialWithParam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetLineStartByLineIdJson">
       <soap12:operation soapAction="http://tempuri.org/GetLineStartByLineIdJson" style="document" />
       <wsdl:input>
@@ -2419,6 +2632,15 @@
     </wsdl:operation>
     <wsdl:operation name="MaterialGetOperationLogs">
       <soap12:operation soapAction="http://tempuri.org/MaterialGetOperationLogs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOperationLogs">
+      <soap12:operation soapAction="http://tempuri.org/GetOperationLogs" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

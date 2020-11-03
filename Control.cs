@@ -537,7 +537,7 @@ namespace Line_Production
         {
             var ett = new LineProductWebServiceReference.tbl_Product_RealtimeEntity()
             {
-                CUSTOMER = "",
+                CUSTOMER = Common.GetValueRegistryKey(Control.PathConfig, RegistryKeys.Customer),
                 LINE_NO = IdLine,
                 MODEL = cbbModel.Text,
                 QTY_PLAN = ProductPlan,
@@ -1060,6 +1060,22 @@ namespace Line_Production
                 {
                     if (PauseProduct == false)
                     {
+                        try
+                        {
+                            var orderItem = pvsservice.GetWorkOrderItemByBoardNo(txtSerial.Text.Trim());
+                            var orderNo = pvsservice.GetWorkOrdersByOrderNo(orderItem.ORDER_NO);
+                            string customer = "";
+                            if(CUSTOMER.CUSTOMERS.TryGetValue(orderNo.CUSTOMER_ID, out customer))
+                            {
+                                Common.WriteRegistry(PathConfig, RegistryKeys.Customer,customer);
+                            }
+
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Không tồn tại serial trên Wip");
+                        }
+
                         if (chkNG.Checked)
                         {
                             var content = new StringBuilder();
