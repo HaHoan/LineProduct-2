@@ -80,6 +80,9 @@ namespace Line_Production.LineProductWebServiceReference {
         
         private System.Nullable<int> ALARMField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NOTEField;
+        
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string ID {
             get {
@@ -245,6 +248,19 @@ namespace Line_Production.LineProductWebServiceReference {
                 if ((this.ALARMField.Equals(value) != true)) {
                     this.ALARMField = value;
                     this.RaisePropertyChanged("ALARM");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=13)]
+        public string NOTE {
+            get {
+                return this.NOTEField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NOTEField, value) != true)) {
+                    this.NOTEField = value;
+                    this.RaisePropertyChanged("NOTE");
                 }
             }
         }

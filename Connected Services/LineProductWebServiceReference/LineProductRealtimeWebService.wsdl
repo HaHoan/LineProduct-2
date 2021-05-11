@@ -26,6 +26,7 @@
               <s:element minOccurs="0" maxOccurs="1" name="STATUS" type="s:string" />
               <s:element minOccurs="1" maxOccurs="1" name="DIFF" nillable="true" type="s:int" />
               <s:element minOccurs="1" maxOccurs="1" name="ALARM" nillable="true" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="NOTE" type="s:string" />
             </s:sequence>
           </s:extension>
         </s:complexContent>

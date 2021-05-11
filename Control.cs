@@ -639,18 +639,18 @@ namespace Line_Production
         {
             LabelTimeDate.Text = DateAndTime.Now.ToString("HH:mm:ss  dd/MM/yyyy");
             _counter++;
-            // TimerPress.Enabled = True
             if (BtStart.Text != "Bắt đầu")
             {
                 int sumtime = DateAndTime.Now.Hour * 100 + DateAndTime.Now.Minute;
+                int indexCurrent = 0;
                 for (int index = 1; index <= 20; index++)
                 {
                     if (index % 2 != 0)
                     {
                         if (sumtime >= TimeLine[index].Hour * 100 + TimeLine[index].Minute & sumtime <= TimeLine[index + 1].Hour * 100 + TimeLine[index + 1].Minute)
                         {
-                            // ProductPlan = Int(((Val(Now.Hour - TimeLine(index).Hour)) * 3600 + (Val(Now.Minute - TimeLine(index).Minute)) * 60 + (Val(Now.Second - TimeLine(index).Second))) / CycleTimeModel) + ProductPlanBegin
                             bien_dem = bien_dem + 1;
+                            indexCurrent = index/2 + 1;
                             PauseProduct = false;
                             break;
                         }
@@ -661,7 +661,6 @@ namespace Line_Production
                     }
                     else if (index == 20)
                     {
-                        // ProductPlanBegin = ProductPlan
                         PauseProduct = true;
                     }
                 }
@@ -669,18 +668,13 @@ namespace Line_Production
                 if (bien_dem == 0)
                 {
                     time_scanBarcode = DateAndTime.Now;
+                  
                 }
 
 
-                // If BarcodeEnable = True Then TextSerial.Focus()
                 BalanceProduction = CountProduct - ProductPlan;
-                //int perBalanceProduction = 0;
-                //if (ProductPlan != 0)
-                //{
-                //    perBalanceProduction = ProductPlan == 0 ? 0 : BalanceProduction / ProductPlan * 100;
-                //}
+                
                 var perBalanceProduction = ProductPlan == 0 ? 0 : BalanceProduction * 100 / ProductPlan;
-                // Console.WriteLine("perBanlanceProduction: {0}, BalanceErrorSetup: {1}, BalanceAlarmSetup: {2}", perBalanceProduction, BalanceErrorSetup, BalanceAlarmSetup)
                 if (perBalanceProduction < BalanceErrorSetup)
                 {
                     StatusLine = 3;
@@ -699,13 +693,6 @@ namespace Line_Production
 
                 if (PauseProduct == true)
                 {
-                    // TimePauseLine = TimePauseLine + 1
-                    // If TimePauseLine Mod 2 = 0 Then
-                    // ShowStatus(StatusLine, True)
-                    // TimePauseLine = 0
-                    // Else
-                    // ShowStatus(StatusLine, False)
-                    // End If
                     Timer2.Enabled = true;
                 }
                 else
@@ -716,18 +703,6 @@ namespace Line_Production
                 txtPlan.Text = ProductPlan.ToString();
                 txtActual.Text = CountProduct.ToString();
                 TextBalance.Text = BalanceProduction.ToString();
-                // MsgBox(Format(BalanceProduction, "0000"))
-
-                // If BalanceProduction < 0 Then
-                // If Math.Abs(BalanceProduction) >= 1000 Then
-                // ArraySend = "S-" & Format(999, "000") & Format(CountProduct, "0000") & Format(ProductPlan, "0000") & Format(NoPeople, "00") & "*"
-                // Else
-                // ArraySend = "S" & Format(BalanceProduction, "000") & Format(CountProduct, "0000") & Format(ProductPlan, "0000") & Format(NoPeople, "00") & "*"
-                // End If
-
-                // Else
-                // ArraySend = "S+" & Format(BalanceProduction, "000") & Format(CountProduct, "0000") & Format(ProductPlan, "0000") & Format(NoPeople, "00") & "*"
-                // End If
                 int total = 0;
                 try
                 {
@@ -749,7 +724,6 @@ namespace Line_Production
                 {
                     ArraySend = "S+" + Strings.Format(BalanceProduction, "000") + Strings.Format(CountProduct, "0000") + Strings.Format(total, "0000") + Strings.Format(NoPeople, "00") + "*";
                 }
-                // Console.WriteLine(ArraySend)
                 var entity = new Online()
                 {
                     LineID = IdLine,
@@ -771,7 +745,8 @@ namespace Line_Production
                     CYRCLETIME_ACTUAL = (decimal)CycleTimeActual,
                     DIFF = BalanceProduction,
                     ALARM = StatusLine,
-                    STATUS = "RUNNING"
+                    STATUS = "RUNNING",
+                    NOTE = Table1.Controls.Find("TextComment" + indexCurrent, true)[0].Text
                 };
                 // Repository.UpdatateData(entities)
                 if (_counter >= 60)

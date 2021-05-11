@@ -147,6 +147,7 @@
     <Compile Include="frmConfig.Designer.cs">
       <DependentUpon>frmConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Khaibaobien.cs">
       <SubType>Form</SubType>
     </Compile>
