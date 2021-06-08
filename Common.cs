@@ -17,6 +17,21 @@ namespace Line_Production
 {
     public partial class Common
     {
+        public static void ActiveProcess(string title)
+        {
+            Process[] processes = Process.GetProcesses();
+            int windowHandle = 0;
+            foreach (Process p in processes)
+            {
+                if (p.MainWindowTitle.Contains(title))
+                {
+                    windowHandle = (int)p.MainWindowHandle;
+                    break;
+                }
+
+            }
+            NativeWin32.SetForegroundWindow(windowHandle);
+        }
         public static void WriteRegistry(string path, string keyName, string content)
         {
             var key = Registry.CurrentUser.CreateSubKey(path);

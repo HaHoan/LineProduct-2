@@ -1076,14 +1076,16 @@ namespace Line_Production
                                 }
                                 else
                                 {
-                                    NativeWin32.SetForegroundWindow(wipHandle);
-                                    Thread.Sleep(200);
-                                    //SendKeys.SendWait(txtSerial.Text);
-                                    Clipboard.SetText(txtSerial.Text, TextDataFormat.Text);
+
+                                    Common.ActiveProcess(nameSoft);
+                                    Clipboard.SetText(txtSerial.Text.Trim());
                                     SendKeys.Send("^V");
-                                    Thread.Sleep(300);
-                                    SendKeys.SendWait("{Enter}");
-                                    Thread.Sleep(200);
+                                    Thread.Sleep(170);
+                                    SendKeys.Send("{ENTER}");
+                                    Thread.Sleep(170);
+                                    Common.ActiveProcess(this.Text);
+                                    Thread.Sleep(220);
+                                 
                                     bool IsWipSuccess = false;
                                     for (int i = 0; i < 10; i++)
                                     {
@@ -1094,7 +1096,7 @@ namespace Line_Production
                                         }
                                         Thread.Sleep(100);
                                     }
-                                    SendKeys.SendWait("%{TAB}");
+                                    //SendKeys.SendWait("%{TAB}");
                                     if (!IsWipSuccess)
                                     {
                                         txtSerial.SelectAll();

@@ -12,7 +12,7 @@ namespace Line_Production.Database
 
     public class HondaLocks
     {
-        public const string TABLE = "LINE_HONDALOCK";
+        public const string TABLE = "HondaLock";
         public object Insert(object o)
         {
             try
