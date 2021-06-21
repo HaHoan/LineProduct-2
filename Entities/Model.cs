@@ -6,6 +6,7 @@
         public string ModelID { get; set; }
         public double Cycle { get; set; }
         public bool UseBarcode { get; set; }
+        public bool UseMacbox { get; set; }
         public double WarnQuantity { get; set; }
         public double MinQuantity { get; set; }
         public int PersonInLine { get; set; }
@@ -21,6 +22,7 @@
         public static string MinQuantity = "MinQuantity";
         public static string CharModel = "CharModel";
         public static string UseBarcode = "UseBarcode";
+        public static string UseMacbox = "UseMacbox";
 
     }
 }

@@ -42,6 +42,7 @@
             this.ckbUseBarcode = new System.Windows.Forms.CheckBox();
             this.btnSaveChanged = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.cbUseMacbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -170,11 +171,24 @@
             this.label5.TabIndex = 8;
             this.label5.Text = "Cảnh báo SL bất thường";
             // 
+            // cbUseMacbox
+            // 
+            this.cbUseMacbox.AutoSize = true;
+            this.cbUseMacbox.Checked = true;
+            this.cbUseMacbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbUseMacbox.Location = new System.Drawing.Point(88, 293);
+            this.cbUseMacbox.Name = "cbUseMacbox";
+            this.cbUseMacbox.Size = new System.Drawing.Size(110, 17);
+            this.cbUseMacbox.TabIndex = 26;
+            this.cbUseMacbox.Text = "Sử dụng Mac box";
+            this.cbUseMacbox.UseVisualStyleBackColor = true;
+            // 
             // AddModelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(383, 385);
+            this.Controls.Add(this.cbUseMacbox);
             this.Controls.Add(this.btnSaveChanged);
             this.Controls.Add(this.ckbUseBarcode);
             this.Controls.Add(this.txbRegex);
@@ -213,5 +227,6 @@
         private System.Windows.Forms.CheckBox ckbUseBarcode;
         private System.Windows.Forms.Button btnSaveChanged;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox cbUseMacbox;
     }
 }

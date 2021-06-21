@@ -17,7 +17,7 @@ namespace Line_Production.Database
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("insert into " + TABLE + "(Model,PersonPerLine,CycleTime,WarnQuantity,MinQuantity,CharModel,UseBarcode) values(@Model, @PersonPerLine, @CycleTime, @WarnQuantity, @MinQuantity, @CharModel,@UseBarcode); SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("insert into " + TABLE + "(Model,PersonPerLine,CycleTime,WarnQuantity,MinQuantity,CharModel,UseBarcode,UseMacbox) values(@Model, @PersonPerLine, @CycleTime, @WarnQuantity, @MinQuantity, @CharModel,@UseBarcode,@UseMacbox); SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                 {
                     cmd.Parameters.AddWithValue("@Model", (o as Model).ModelID);
                     cmd.Parameters.AddWithValue("@PersonPerLine", (o as Model).PersonInLine);
@@ -26,6 +26,7 @@ namespace Line_Production.Database
                     cmd.Parameters.AddWithValue("@MinQuantity", (o as Model).MinQuantity);
                     cmd.Parameters.AddWithValue("@CharModel", (o as Model).CharModel);
                     cmd.Parameters.AddWithValue("@UseBarcode", (o as Model).UseBarcode);
+                    cmd.Parameters.AddWithValue("@UseMacbox", (o as Model).UseMacbox);
 
                     (o as Model).Id = (int)cmd.ExecuteScalar();
                     return o;
@@ -38,11 +39,11 @@ namespace Line_Production.Database
                 return null;
             }
         }
-        public object Update(Model o)
+        public void Update(Model o)
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("update " + TABLE + " set Model = @Model, PersonPerLine = @PersonPerLine, CycleTime = @CycleTime, WarnQuantity = @WarnQuantity, MinQuantity = @MinQuantity, CharModel = @CharModel,UseBarcode = @UseBarcode where Id = '" + o.Id + "'", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("update " + TABLE + " set Model = @Model, PersonPerLine = @PersonPerLine, CycleTime = @CycleTime, WarnQuantity = @WarnQuantity, MinQuantity = @MinQuantity, CharModel = @CharModel,UseBarcode = @UseBarcode,UseMacbox = @UseMacbox  where Id = '" + o.Id + "'", DataProvider.Instance.DB))
                 {
                     cmd.Parameters.AddWithValue("@Model", (o as Model).ModelID);
                     cmd.Parameters.AddWithValue("@PersonPerLine", (o as Model).PersonInLine);
@@ -51,16 +52,15 @@ namespace Line_Production.Database
                     cmd.Parameters.AddWithValue("@MinQuantity", (o as Model).MinQuantity);
                     cmd.Parameters.AddWithValue("@CharModel", (o as Model).CharModel);
                     cmd.Parameters.AddWithValue("@UseBarcode", (o as Model).UseBarcode);
+                    cmd.Parameters.AddWithValue("@UseMacbox", (o as Model).UseMacbox);
 
                     (o as Model).Id = (int)cmd.ExecuteScalar();
-                    return o;
                 }
 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message.ToString());
-                return null;
             }
         }
         public List<Model> Select()
@@ -83,6 +83,7 @@ namespace Line_Production.Database
                             model.ModelID = reader[reader.GetOrdinal(ModelString.ModelID)] as string;
                             model.Cycle = reader.GetDouble(reader.GetOrdinal(ModelString.CycleTime));
                             model.UseBarcode = reader.GetInt32(reader.GetOrdinal(ModelString.UseBarcode)) == 1 ? true : false;
+                            model.UseMacbox =reader.IsDBNull(reader.GetOrdinal(ModelString.UseMacbox)) ? false : reader.GetInt32(reader.GetOrdinal(ModelString.UseMacbox)) == 1 ? true : false;
                             model.WarnQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.WarnQuantity));
                             model.MinQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.MinQuantity));
                             model.CharModel = reader[reader.GetOrdinal(ModelString.CharModel)] as string;
@@ -105,7 +106,7 @@ namespace Line_Production.Database
         {
             try
             {
-                string sql = "select * from " + TABLE + " where Model = '" + ModelID + "'";
+                string sql = "select * from " + TABLE + " where Model like '%" + ModelID + "%'";
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
 
                 using (DbDataReader reader = command.ExecuteReader())
@@ -120,6 +121,7 @@ namespace Line_Production.Database
                             model.ModelID = reader[reader.GetOrdinal(ModelString.ModelID)] as string;
                             model.Cycle = reader.GetDouble(reader.GetOrdinal(ModelString.CycleTime));
                             model.UseBarcode = reader.GetInt32(reader.GetOrdinal(ModelString.UseBarcode)) == 1 ? true : false;
+                            model.UseMacbox = reader.GetInt32(reader.GetOrdinal(ModelString.UseMacbox)) == 1 ? true : false;
                             model.WarnQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.WarnQuantity));
                             model.MinQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.MinQuantity));
                             model.CharModel = reader[reader.GetOrdinal(ModelString.CharModel)] as string;

@@ -36,13 +36,17 @@
             this.Label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.dgrvListModel = new System.Windows.Forms.DataGridView();
+            this.txbSearchModel = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.ModelID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PersonInLine = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CycleTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WarmQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MinQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CharModel = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.UseBarcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UseMacbox = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -61,6 +65,8 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.label2);
+            this.panel3.Controls.Add(this.txbSearchModel);
             this.panel3.Controls.Add(this.btnDelete);
             this.panel3.Controls.Add(this.btnEdit);
             this.panel3.Controls.Add(this.btnAdd);
@@ -136,23 +142,49 @@
             this.dgrvListModel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgrvListModel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ModelID,
+            this.Id,
             this.PersonInLine,
             this.CycleTime,
             this.WarmQuantity,
             this.MinQuantity,
             this.CharModel,
-            this.UseBarcode});
+            this.UseBarcode,
+            this.UseMacbox});
             this.dgrvListModel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgrvListModel.Location = new System.Drawing.Point(0, 0);
             this.dgrvListModel.Name = "dgrvListModel";
             this.dgrvListModel.Size = new System.Drawing.Size(800, 302);
             this.dgrvListModel.TabIndex = 0;
             // 
+            // txbSearchModel
+            // 
+            this.txbSearchModel.Location = new System.Drawing.Point(100, 32);
+            this.txbSearchModel.Name = "txbSearchModel";
+            this.txbSearchModel.Size = new System.Drawing.Size(331, 20);
+            this.txbSearchModel.TabIndex = 3;
+            this.txbSearchModel.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txbSearchModel_PreviewKeyDown);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(42, 35);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(36, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Model";
+            // 
             // ModelID
             // 
             this.ModelID.DataPropertyName = "ModelID";
             this.ModelID.HeaderText = "Model ID";
             this.ModelID.Name = "ModelID";
+            // 
+            // Id
+            // 
+            this.Id.DataPropertyName = "Id";
+            this.Id.HeaderText = "Id";
+            this.Id.Name = "Id";
+            this.Id.Visible = false;
             // 
             // PersonInLine
             // 
@@ -168,7 +200,7 @@
             // 
             // WarmQuantity
             // 
-            this.WarmQuantity.DataPropertyName = "WarmQuantity";
+            this.WarmQuantity.DataPropertyName = "WarnQuantity";
             this.WarmQuantity.HeaderText = "Cảnh báo số lượng";
             this.WarmQuantity.Name = "WarmQuantity";
             // 
@@ -190,6 +222,12 @@
             this.UseBarcode.HeaderText = "Sủ dụng barcode";
             this.UseBarcode.Name = "UseBarcode";
             // 
+            // UseMacbox
+            // 
+            this.UseMacbox.DataPropertyName = "UseMacbox";
+            this.UseMacbox.HeaderText = "Sử dụng Mac box";
+            this.UseMacbox.Name = "UseMacbox";
+            // 
             // ListModel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -203,6 +241,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgrvListModel)).EndInit();
             this.ResumeLayout(false);
@@ -215,16 +254,20 @@
         private System.Windows.Forms.Panel panel2;
         internal System.Windows.Forms.Label Label1;
         private System.Windows.Forms.DataGridView dgrvListModel;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txbSearchModel;
         private System.Windows.Forms.DataGridViewTextBoxColumn ModelID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn PersonInLine;
         private System.Windows.Forms.DataGridViewTextBoxColumn CycleTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn WarmQuantity;
         private System.Windows.Forms.DataGridViewTextBoxColumn MinQuantity;
         private System.Windows.Forms.DataGridViewTextBoxColumn CharModel;
         private System.Windows.Forms.DataGridViewTextBoxColumn UseBarcode;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.Button btnEdit;
-        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UseMacbox;
     }
 }

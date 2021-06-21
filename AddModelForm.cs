@@ -31,13 +31,14 @@ namespace Line_Production
                 var model = new Model()
                 {
                     Id = ID,
-                    ModelID = txbModelID.Text.ToString(),
+                    ModelID = txbModelID.Text.ToString().Trim(),
                     PersonInLine = int.Parse(txbPersonInLine.Text.ToString()),
                     Cycle = float.Parse(txbCycle.Text.ToString()),
                     WarnQuantity = float.Parse(txbWarmQuatity.Text.ToString()),
                     MinQuantity = float.Parse(txbMnQuantity.Text.ToString()),
-                    CharModel = txbRegex.Text.ToString(),
-                    UseBarcode = ckbUseBarcode.Checked
+                    CharModel = txbRegex.Text.ToString().Trim(),
+                    UseBarcode = ckbUseBarcode.Checked,
+                    UseMacbox = cbUseMacbox.Checked
                 };
                 if(model.Id == 0)
                 {
@@ -74,6 +75,7 @@ namespace Line_Production
                 txbMnQuantity.Text = model.MinQuantity.ToString();
                 txbRegex.Text = model.CharModel;
                 ckbUseBarcode.Checked = model.UseBarcode;
+                cbUseMacbox.Checked = model.UseMacbox;
             }
             else
             {

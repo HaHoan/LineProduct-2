@@ -14,30 +14,21 @@ namespace Line_Production
 {
     public partial class ListModel : Form
     {
+        private List<Model> list = new List<Model>();
+    
         public ListModel()
         {
             InitializeComponent();
-            SetDrgvListModel();
+           // SetDrgvListModel();
 
         }
 
-        private void SetDataForListModel(List<Model> list)
+        private void SetDataForListModel()
         {
             try
             {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    Model model = list[i];
-                    int rowId = dgrvListModel.Rows.Add();
-                    DataGridViewRow row = dgrvListModel.Rows[rowId];
-                    dgrvListModel.Rows[i].Cells[0].Value = model.ModelID;
-                    dgrvListModel.Rows[i].Cells[1].Value = model.PersonInLine;
-                    dgrvListModel.Rows[i].Cells[2].Value = model.Cycle;
-                    dgrvListModel.Rows[i].Cells[3].Value = model.WarnQuantity;
-                    dgrvListModel.Rows[i].Cells[4].Value = model.MinQuantity;
-                    dgrvListModel.Rows[i].Cells[5].Value = model.CharModel;
-                    dgrvListModel.Rows[i].Cells[6].Value = model.UseBarcode ? "Có" : "Không";
-                }
+                dgrvListModel.DataSource = list;
+                dgrvListModel.Refresh();
             }
             catch (Exception e)
             {
@@ -48,21 +39,11 @@ namespace Line_Production
 
         }
 
-        private void SetDrgvListModel()
-        {
-            dgrvListModel.ColumnCount = 7;
-            dgrvListModel.Columns[0].Name = "Model ID";
-            dgrvListModel.Columns[1].Name = "Số người trên line";
-            dgrvListModel.Columns[2].Name = "Cycle Time";
-            dgrvListModel.Columns[3].Name = "Cảnh báo số lượng";
-            dgrvListModel.Columns[4].Name = "Cảnh báo số lượng bất thường";
-            dgrvListModel.Columns[5].Name = "Kí tự Model";
-            dgrvListModel.Columns[6].Name = "Sử dụng Barcode";
-        }
 
         private void ListModel_Load(object sender, EventArgs e)
         {
-            SetDataForListModel(DataProvider.Instance.ModelQuantities.Select());
+            list = DataProvider.Instance.ModelQuantities.Select();
+            SetDataForListModel();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -71,7 +52,8 @@ namespace Line_Production
             addModelForm.close = () =>
             {
                 dgrvListModel.Rows.Clear();
-                SetDataForListModel(DataProvider.Instance.ModelQuantities.Select());
+                list = DataProvider.Instance.ModelQuantities.Select();
+                SetDataForListModel();
             };
             addModelForm.ShowDialog();
         }
@@ -107,12 +89,12 @@ namespace Line_Production
                 if(dgrvListModel.SelectedRows.Count > 0)
                 {
                     DataGridViewRow r = dgrvListModel.SelectedRows[0];
-                    string ModelID = r.Cells[0].Value.ToString();
+                    string ModelID = r.Cells[1].Value.ToString();
                     var addModelForm = new AddModelForm(ModelID);
                     addModelForm.close = () =>
                     {
-                        dgrvListModel.Rows.Clear();
-                        SetDataForListModel(DataProvider.Instance.ModelQuantities.Select());
+                        list = DataProvider.Instance.ModelQuantities.Select();
+                        SetDataForListModel();
                     };
                     addModelForm.ShowDialog();
                 }
@@ -125,6 +107,35 @@ namespace Line_Production
             {
 
                 MessageBox.Show(ex.Message.ToString());
+            }
+        }
+
+        private void txbSearchModel_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                string txtSearch = txbSearchModel.Text.Trim();
+                if (!string.IsNullOrEmpty(txtSearch))
+                {
+                    var listFilter = list.Where(m => m.ModelID.ToUpper().Contains(txtSearch.ToUpper())).ToList();
+                    if (listFilter != null)
+                    {
+                        dgrvListModel.DataSource = listFilter;
+                        dgrvListModel.Refresh();
+                    }
+                    else
+                    {
+                        dgrvListModel.DataSource = new List<Model>();
+                        dgrvListModel.Refresh();
+                    }
+                }
+                else
+                {
+                    dgrvListModel.DataSource = list;
+                    dgrvListModel.Refresh();
+                }
+               
+                             
             }
         }
     }

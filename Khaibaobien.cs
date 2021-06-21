@@ -21,6 +21,7 @@ namespace Line_Production
         // cac bien cai dat den line san xuat---------------------------------------------------------------
         public static string IdLine = "";
         public static int NoPeople = 0; // bien lua gia tri so nguoi can cua 1 model
+        public static bool UseMacbox = false; // bien lua gia tri model có sử dụng macbox hay không 
         public static bool BarcodeEnable = false; // bien cho phep model co su dung chuc nang barcode hay khong
         public static double CycleTimeModel = 30.6d;
         public static double CycleTimeActual = 0.0d;
@@ -163,6 +164,7 @@ namespace Line_Production
                     BalanceAlarmSetup = (int)model.WarnQuantity;
                     BalanceErrorSetup = (int)model.MinQuantity;
                     ModelRev = model.CharModel;
+                    UseMacbox = model.UseMacbox;
                     ConfirmModel = false;
                 }
                 catch (Exception e)

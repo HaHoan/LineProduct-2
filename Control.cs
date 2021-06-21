@@ -155,6 +155,7 @@ namespace Line_Production
             for (int index = 1; index <= 9; index++)
                 CountProductPerHour[index] = 0;
             NoPeople = 0;
+            UseMacbox = false;
             ModelCurrent = "";
             Shape2.Visible = false;
             Shape1.Visible = false;
@@ -186,7 +187,7 @@ namespace Line_Production
             catch { }
 
             // quyetpham add 16/9
-            CheckBox1.Enabled = false;
+            cbUserMacBox.Enabled = false;
             txtConfirm.Text = "";
             txtConfirm.Enabled = false;
             chkOK.Checked = true;
@@ -323,8 +324,8 @@ namespace Line_Production
                     BtStop.Enabled = true;
                     // quyetpham add 16/9
 
-                    CheckBox1.Enabled = false;
-                    CheckBox1.Checked = true;
+                    cbUserMacBox.Enabled = false;
+                    cbUserMacBox.Checked = true;
                     LoadProduction();
                     txtPlan.Text = Math.Round(TimeCycleActual / CycleTimeModel, 0, MidpointRounding.AwayFromZero).ToString(); // ProductPlanBegin.ToString()
                     txtActual.Text = CountProduct.ToString();
@@ -474,13 +475,12 @@ namespace Line_Production
             Shape2.Visible = false;
             Shape3.Visible = false;
             // quyetpham add 16/9
-            CheckBox1.Enabled = true;
+            cbUserMacBox.Enabled = true;
             chkNG.Enabled = true;
             if (BtStart.Text == "Bắt đầu")
             {
                 PauseProduct = false;
                 StartProduct = true;
-                TextMacBox.Enabled = true;
                 // GroupBox3.Controls("Shape" & StatusLine).Visible = True
                 BtStart.Text = "Online";
                 BtStart.Image = Properties.Resources.pause;
@@ -528,8 +528,19 @@ namespace Line_Production
                 ProductPlan = (int)Math.Round(TimeCycleActual / CycleTimeModel, 0, MidpointRounding.AwayFromZero);
                 txtPlan.Text = ProductPlan.ToString();
             }
-            TextMacBox.Enabled = true;
-            TextMacBox.Focus();
+            if (UseMacbox)
+            {
+                TextMacBox.Enabled = true;
+                TextMacBox.Focus();
+            }
+            else
+            {
+                txtSerial.Enabled = true;
+                txtSerial.Focus();
+                LabelPCS1BOX.Text = lblTotal.Text;
+                PCBBOX = int.Parse(lblTotal.Text);
+            }
+           
 
         }
 
@@ -874,7 +885,7 @@ namespace Line_Production
                     txtSerial.Focus();
                 }
 
-                CheckBox1.Enabled = false;
+                cbUserMacBox.Enabled = false;
                 LabelPCBA.Text = IDCount.ToString();
                 //Box_curent = TextMacBox.Text;
 
@@ -899,17 +910,17 @@ namespace Line_Production
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (CheckBox1.Checked == false)
-            {
-                TextMacBox.Enabled = false;
-                txtSerial.Enabled = true;
-                txtSerial.Focus();
-                CheckBox1.Enabled = false;
-            }
-            else
-            {
-                // TextMacBox.Enabled = True
-            }
+            //if (cbUserMacBox.Checked == false)
+            //{
+            //    TextMacBox.Enabled = false;
+            //    txtSerial.Enabled = true;
+            //    txtSerial.Focus();
+            //    cbUserMacBox.Enabled = false;
+            //}
+            //else
+            //{
+            //    // TextMacBox.Enabled = True
+            //}
         }
 
         private void txtSearch_KeyPress(object sender, KeyPressEventArgs e)
@@ -1109,7 +1120,7 @@ namespace Line_Production
                                         IDCount += 1;
                                         if (IDCount == PCBBOX)
                                         {
-                                            if (CheckBox1.Checked)
+                                            if (UseMacbox)
                                             {
                                                 TextMacBox.Enabled = true;
                                                 TextMacBox.Focus();
@@ -1118,7 +1129,7 @@ namespace Line_Production
                                             }
                                             else
                                             {
-                                                txtSerial.Focus();
+                                                BtStop.PerformClick();
                                             }
 
                                             IDCount = 0;
@@ -1150,45 +1161,7 @@ namespace Line_Production
                             }
 
                         }
-                        else if (useWip == false)
-                        {
-
-                            KiemTraTrenHondaLock(() =>
-                            {
-                                IDCount += 1;
-                                if (IDCount == PCBBOX)
-                                {
-                                    if (CheckBox1.Checked)
-                                    {
-                                        TextMacBox.Enabled = true;
-                                        TextMacBox.Focus();
-                                        txtSerial.Enabled = false;
-                                        TextMacBox.Clear();
-                                    }
-                                    else
-                                    {
-                                        txtSerial.Focus();
-                                    }
-
-                                    IDCount = 0;
-                                    IDCount_box += 1;
-                                    Box_curent = "";
-                                }
-
-                                LabelPCBA.Text = IDCount.ToString();
-                                LabelSoThung.Text = IDCount_box.ToString();
-                                IncreaseProduct();
-                                if (ConfirmModel & IDCount != 0)
-                                {
-                                    txtConfirm.Enabled = true;
-                                    txtConfirm.SelectAll();
-                                    txtConfirm.Focus();
-                                    txtSerial.Enabled = false;
-                                }
-                            }, () => { });
-
-                            //}
-                        }
+                      
                         else
                         {
                             try
@@ -1205,7 +1178,7 @@ namespace Line_Production
                                     IDCount += 1;
                                     if (IDCount == PCBBOX)
                                     {
-                                        if (CheckBox1.Checked)
+                                        if (UseMacbox)
                                         {
                                             TextMacBox.Enabled = true;
                                             TextMacBox.Focus();
@@ -1214,8 +1187,13 @@ namespace Line_Production
                                         }
                                         else
                                         {
-                                            txtSerial.Focus();
+                                            if (MessageBox.Show("Đã chạy hết số lượng model. Bạn có muốn dừng không?") == DialogResult.OK)
+                                            {
+                                                BtStop.PerformClick();
+                                            }
+                                            
                                         }
+
 
                                         IDCount = 0;
                                         IDCount_box += 1;
