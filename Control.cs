@@ -540,7 +540,7 @@ namespace Line_Production
                 LabelPCS1BOX.Text = lblTotal.Text;
                 PCBBOX = int.Parse(lblTotal.Text);
             }
-           
+
 
         }
 
@@ -661,7 +661,7 @@ namespace Line_Production
                         if (sumtime >= TimeLine[index].Hour * 100 + TimeLine[index].Minute & sumtime <= TimeLine[index + 1].Hour * 100 + TimeLine[index + 1].Minute)
                         {
                             bien_dem = bien_dem + 1;
-                            indexCurrent = index/2 + 1;
+                            indexCurrent = index / 2 + 1;
                             PauseProduct = false;
                             break;
                         }
@@ -679,12 +679,12 @@ namespace Line_Production
                 if (bien_dem == 0)
                 {
                     time_scanBarcode = DateAndTime.Now;
-                  
+
                 }
 
 
                 BalanceProduction = CountProduct - ProductPlan;
-                
+
                 var perBalanceProduction = ProductPlan == 0 ? 0 : BalanceProduction * 100 / ProductPlan;
                 if (perBalanceProduction < BalanceErrorSetup)
                 {
@@ -743,29 +743,35 @@ namespace Line_Production
                     Actual = CountProduct,
                     _Date = DateTime.Now.Date
                 };
-                var entities = new LineProductWebServiceReference.tbl_Product_RealtimeEntity()
+                try
                 {
-                    CUSTOMER = "",
-                    LINE_NO = IdLine,
-                    MODEL = cbbModel.Text,
-                    QTY_PLAN = ProductPlan,
-                    QTY_ACTUAL = CountProduct,
-                    UPDATE_TIME = DateTime.Now.Date,
-                    PEOPLE = NoPeople,
-                    CYRCLETIME_PLAN = (decimal)CycleTimeModel,
-                    CYRCLETIME_ACTUAL = (decimal)CycleTimeActual,
-                    DIFF = BalanceProduction,
-                    ALARM = StatusLine,
-                    STATUS = "RUNNING",
-                    NOTE = Table1.Controls.Find("TextComment" + indexCurrent, true)[0].Text
-                };
-                // Repository.UpdatateData(entities)
-                if (_counter >= 60)
-                {
-                    _lineproduct_service.UpdateRealtime(entities);
-                    _counter = 0;
+                    var entities = new LineProductWebServiceReference.tbl_Product_RealtimeEntity()
+                    {
+                        CUSTOMER = "",
+                        LINE_NO = IdLine,
+                        MODEL = cbbModel.Text,
+                        QTY_PLAN = ProductPlan,
+                        QTY_ACTUAL = CountProduct,
+                        UPDATE_TIME = DateTime.Now.Date,
+                        PEOPLE = NoPeople,
+                        CYRCLETIME_PLAN = (decimal)CycleTimeModel,
+                        CYRCLETIME_ACTUAL = (decimal)CycleTimeActual,
+                        DIFF = BalanceProduction,
+                        ALARM = StatusLine,
+                        STATUS = "RUNNING",
+                        NOTE = Table1.Controls.Find("TextComment" + indexCurrent, true)[0].Text
+                    };
+                    // Repository.UpdatateData(entities)
+                    if (_counter >= 60)
+                    {
+                        _lineproduct_service.UpdateRealtime(entities);
+                        _counter = 0;
+                    }
+                    Common.SendToComport(ArraySend, result => { lblState.Text = result; });
+
                 }
-                Common.SendToComport(ArraySend, result => { lblState.Text = result; });
+                catch { }
+
 
             }
         }
@@ -1051,9 +1057,9 @@ namespace Line_Production
                             var orderItem = pvsservice.GetWorkOrderItemByBoardNo(txtSerial.Text.Trim());
                             var orderNo = pvsservice.GetWorkOrdersByOrderNo(orderItem.ORDER_NO);
                             string customer = "";
-                            if(CUSTOMER.CUSTOMERS.TryGetValue(orderNo.CUSTOMER_ID, out customer))
+                            if (CUSTOMER.CUSTOMERS.TryGetValue(orderNo.CUSTOMER_ID, out customer))
                             {
-                                Common.WriteRegistry(PathConfig, RegistryKeys.Customer,customer);
+                                Common.WriteRegistry(PathConfig, RegistryKeys.Customer, customer);
                             }
 
                         }
@@ -1096,7 +1102,7 @@ namespace Line_Production
                                     Thread.Sleep(170);
                                     Common.ActiveProcess(this.Text);
                                     Thread.Sleep(220);
-                                 
+
                                     bool IsWipSuccess = false;
                                     for (int i = 0; i < 10; i++)
                                     {
@@ -1118,7 +1124,14 @@ namespace Line_Production
                                     KiemTraTrenHondaLock(() =>
                                     {
                                         IDCount += 1;
-                                        if (IDCount == PCBBOX)
+                                        if (CountProduct >= int.Parse(lblTotal.Text))
+                                        {
+                                            if (MessageBox.Show("Đã chạy hết số lượng model. Bạn có muốn dừng không?") == DialogResult.OK)
+                                            {
+                                                BtStop.PerformClick();
+                                            }
+                                        }
+                                        else if (IDCount == PCBBOX)
                                         {
                                             if (UseMacbox)
                                             {
@@ -1129,7 +1142,11 @@ namespace Line_Production
                                             }
                                             else
                                             {
-                                                BtStop.PerformClick();
+                                                if (MessageBox.Show("Đã chạy hết số lượng model. Bạn có muốn dừng không?") == DialogResult.OK)
+                                                {
+                                                    BtStop.PerformClick();
+                                                }
+
                                             }
 
                                             IDCount = 0;
@@ -1161,7 +1178,7 @@ namespace Line_Production
                             }
 
                         }
-                      
+
                         else
                         {
                             try
@@ -1176,6 +1193,14 @@ namespace Line_Production
                                 {
                                     /* TODO ERROR: Skipped EndRegionDirectiveTrivia */
                                     IDCount += 1;
+                                    if (CountProduct >= int.Parse(lblTotal.Text))
+                                    {
+                                        if (MessageBox.Show("Đã chạy hết số lượng model. Bạn có muốn dừng không?") == DialogResult.OK)
+                                        {
+                                            BtStop.PerformClick();
+                                        }
+                                    }
+                                    else
                                     if (IDCount == PCBBOX)
                                     {
                                         if (UseMacbox)
@@ -1191,7 +1216,7 @@ namespace Line_Production
                                             {
                                                 BtStop.PerformClick();
                                             }
-                                            
+
                                         }
 
 
