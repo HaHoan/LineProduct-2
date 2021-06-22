@@ -1046,6 +1046,7 @@ namespace Line_Production
         {
             // Repository = New Repository
             pvsservice = new PVSReference.PVSWebServiceSoapClient();
+            string barode = txtSerial.Text.Trim();
             if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(txtSerial.Text))
             {
                 if (Strings.Mid(txtSerial.Text, ModelRevPosition, ModelRev.Length) == ModelRev)
@@ -1082,7 +1083,7 @@ namespace Line_Production
                         {
                             try
                             {
-                                string nameSoft = Common.FindApplication("Board Inspector");
+                                string nameSoft = Common.FindApplication(Common.GetValueRegistryKey(Control.PathConfig, RegistryKeys.Process));
                                 int wipHandle = 0;
                                 wipHandle = NativeWin32.FindWindow(null, nameSoft);
                                 bool temp = Common.IsRunning(nameSoft);
@@ -1094,19 +1095,19 @@ namespace Line_Production
                                 else
                                 {
 
-                                    Common.ActiveProcess(nameSoft);
-                                    Clipboard.SetText(txtSerial.Text.Trim());
-                                    SendKeys.Send("^V");
-                                    Thread.Sleep(170);
+                                    Common.ActiveProcess(Common.GetValueRegistryKey(Control.PathConfig,RegistryKeys.Process));
+                                    Thread.Sleep(1000);
+                                    Clipboard.SetText(barode, TextDataFormat.Text);
+                                    SendKeys.SendWait("^V");
+                                    Thread.Sleep(200);
                                     SendKeys.Send("{ENTER}");
-                                    Thread.Sleep(170);
+                                    Thread.Sleep(200);
                                     Common.ActiveProcess(this.Text);
                                     Thread.Sleep(220);
-
                                     bool IsWipSuccess = false;
                                     for (int i = 0; i < 10; i++)
                                     {
-                                        if (pvsservice.GetWorkOrderItem(txtSerial.Text, STATION) != null)
+                                        if (pvsservice.GetWorkOrderItem(txtSerial.Text.Trim(), STATION) != null)
                                         {
                                             IsWipSuccess = true;
                                             break;

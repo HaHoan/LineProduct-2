@@ -28,6 +28,7 @@ namespace Line_Production
         public static string COM = "COM";
         public static string LinkWip = "LinkWip";
         public static string Customer = "Customer";
+        public static string Process = "Process";
     }
     public static class CaSX
     {

@@ -51,7 +51,6 @@ namespace Line_Production
             var addModelForm = new AddModelForm();
             addModelForm.close = () =>
             {
-                dgrvListModel.Rows.Clear();
                 list = DataProvider.Instance.ModelQuantities.Select();
                 SetDataForListModel();
             };
@@ -64,14 +63,15 @@ namespace Line_Production
             {
                 foreach (DataGridViewRow r in dgrvListModel.SelectedRows)
                 {
-                    string ModelID = r.Cells[0].Value.ToString();
+                    string ModelID = r.Cells[1].Value.ToString();
                     int result = DataProvider.Instance.ModelQuantities.Delete(ModelID);
                     if (result == 0)
                     {
                         MessageBox.Show("Có lỗi xảy ra!");
                         return;
                     }
-                    dgrvListModel.Rows.Remove(r);
+                    list = DataProvider.Instance.ModelQuantities.Select();
+                    SetDataForListModel();
                 }
             }
             catch (Exception ex)
