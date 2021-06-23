@@ -1131,13 +1131,13 @@ namespace Line_Production
                                 else
                                 {
 
-                                    Common.ActiveProcess(Common.GetValueRegistryKey(Control.PathConfig, RegistryKeys.Process));
-                                    Thread.Sleep(1000);
-                                    Clipboard.SetText(barode, TextDataFormat.Text);
-                                    SendKeys.SendWait("^V");
-                                    Thread.Sleep(200);
+                                    Common.ActiveProcess(nameSoft);
+                                    Console.Write(nameSoft);
+                                    Clipboard.SetText(txtSerial.Text.Trim());
+                                    SendKeys.Send("^V");
+                                    Thread.Sleep(170);
                                     SendKeys.Send("{ENTER}");
-                                    Thread.Sleep(200);
+                                    Thread.Sleep(170);
                                     Common.ActiveProcess(this.Text);
                                     Thread.Sleep(220);
                                     bool IsWipSuccess = false;
