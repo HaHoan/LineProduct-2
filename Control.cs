@@ -155,7 +155,7 @@ namespace Line_Production
             for (int index = 1; index <= 9; index++)
                 CountProductPerHour[index] = 0;
             NoPeople = 0;
-            UseMacbox = false;
+            NumberInModel = 0;
             ModelCurrent = "";
             Shape2.Visible = false;
             Shape1.Visible = false;
@@ -220,7 +220,17 @@ namespace Line_Production
                 ProductPlan = passRate.ProductPlan;
                 CountProduct = passRate.Actual;
                 IDCount = 0;
-                IDCount_box = 0;
+
+                if (NumberInModel > 0)
+                {
+                    IDCount_box = DataProvider.Instance.HondaLocks.SoLuongBanMachDaDem(cbbModel.Text.Trim());
+                    IDCount_box = IDCount_box / NumberInModel;
+                }
+                else
+                {
+                    IDCount_box = DataProvider.Instance.HondaLocks.SoLuongThungDaDem(cbbModel.Text.Trim());
+                }
+
                 Box_curent = "";
                 TimeCycleActual = (int)passRate.TimeCycleActual;
                 for (int index = 0; index < 10; index++)
@@ -331,6 +341,7 @@ namespace Line_Production
                     txtActual.Text = CountProduct.ToString();
                     TextBalance.Text = Math.Abs(CountProduct - ProductPlanBegin).ToString();
                     lblQuantity.Text = CountProduct.ToString();
+                    LabelSoThung.Text = IDCount_box.ToString();
                     TextCycleTimeCurrent.Text = Math.Round((double)TimeCycleActual / CountProduct, 1, MidpointRounding.AwayFromZero).ToString();
                     if (CheckCaSX() == true)
                     {
@@ -528,17 +539,42 @@ namespace Line_Production
                 ProductPlan = (int)Math.Round(TimeCycleActual / CycleTimeModel, 0, MidpointRounding.AwayFromZero);
                 txtPlan.Text = ProductPlan.ToString();
             }
-            if (UseMacbox)
+            if (NumberInModel == 0)
             {
                 TextMacBox.Enabled = true;
                 TextMacBox.Focus();
             }
             else
             {
+                IDCount = DataProvider.Instance.HondaLocks.SoLuongBanMachDaDem(cbbModel.Text) - IDCount_box * NumberInModel;
+                PCBBOX = NumberInModel;
+                if (PCBBOX < 0)
+                {
+                    NG_FORM NG_FORM = new NG_FORM();
+                    NG_FORM.Show();
+                    NG_FORM.Lb_inform_NG.Text = "Mã thùng không tồn tại";
+                    NG_FORM.GroupBox3.Visible = false;
+                    NG_FORM.GroupBox3.Enabled = false;
+                    NG_FORM.ControlBox = true;
+                    TextMacBox.SelectAll();
+                    return;
+                }
+                LabelPCS1BOX.Text = PCBBOX.ToString();
+                TextMacBox.Enabled = false;
                 txtSerial.Enabled = true;
+                txtSerial.SelectAll();
                 txtSerial.Focus();
-                LabelPCS1BOX.Text = lblTotal.Text;
-                PCBBOX = int.Parse(lblTotal.Text);
+                if (IDCount >= PCBBOX)
+                {
+                    LabelPCBA.Text = "0";
+                    IDCount = 0;
+                }
+                else
+                {
+                    LabelPCBA.Text = IDCount.ToString();
+                }
+
+
             }
 
 
@@ -1095,7 +1131,7 @@ namespace Line_Production
                                 else
                                 {
 
-                                    Common.ActiveProcess(Common.GetValueRegistryKey(Control.PathConfig,RegistryKeys.Process));
+                                    Common.ActiveProcess(Common.GetValueRegistryKey(Control.PathConfig, RegistryKeys.Process));
                                     Thread.Sleep(1000);
                                     Clipboard.SetText(barode, TextDataFormat.Text);
                                     SendKeys.SendWait("^V");
@@ -1125,16 +1161,10 @@ namespace Line_Production
                                     KiemTraTrenHondaLock(() =>
                                     {
                                         IDCount += 1;
-                                        if (CountProduct >= int.Parse(lblTotal.Text))
+
+                                        if (IDCount == PCBBOX)
                                         {
-                                            if (MessageBox.Show("Đã chạy hết số lượng model. Bạn có muốn dừng không?") == DialogResult.OK)
-                                            {
-                                                BtStop.PerformClick();
-                                            }
-                                        }
-                                        else if (IDCount == PCBBOX)
-                                        {
-                                            if (UseMacbox)
+                                            if (NumberInModel == 0)
                                             {
                                                 TextMacBox.Enabled = true;
                                                 TextMacBox.Focus();
@@ -1143,10 +1173,8 @@ namespace Line_Production
                                             }
                                             else
                                             {
-                                                if (MessageBox.Show("Đã chạy hết số lượng model. Bạn có muốn dừng không?") == DialogResult.OK)
-                                                {
-                                                    BtStop.PerformClick();
-                                                }
+                                                txtSerial.SelectAll();
+                                                txtSerial.Focus();
 
                                             }
 
@@ -1194,17 +1222,10 @@ namespace Line_Production
                                 {
                                     /* TODO ERROR: Skipped EndRegionDirectiveTrivia */
                                     IDCount += 1;
-                                    if (CountProduct >= int.Parse(lblTotal.Text))
-                                    {
-                                        if (MessageBox.Show("Đã chạy hết số lượng model. Bạn có muốn dừng không?") == DialogResult.OK)
-                                        {
-                                            BtStop.PerformClick();
-                                        }
-                                    }
-                                    else
+                                   
                                     if (IDCount == PCBBOX)
                                     {
-                                        if (UseMacbox)
+                                        if (NumberInModel == 0)
                                         {
                                             TextMacBox.Enabled = true;
                                             TextMacBox.Focus();
@@ -1213,11 +1234,8 @@ namespace Line_Production
                                         }
                                         else
                                         {
-                                            if (MessageBox.Show("Đã chạy hết số lượng model. Bạn có muốn dừng không?") == DialogResult.OK)
-                                            {
-                                                BtStop.PerformClick();
-                                            }
-
+                                            txtSerial.Clear();
+                                            txtSerial.Focus();
                                         }
 
 

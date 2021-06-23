@@ -42,7 +42,8 @@
             this.ckbUseBarcode = new System.Windows.Forms.CheckBox();
             this.btnSaveChanged = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.cbUseMacbox = new System.Windows.Forms.CheckBox();
+            this.txbNumberInModel = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -137,7 +138,7 @@
             this.ckbUseBarcode.AutoSize = true;
             this.ckbUseBarcode.Checked = true;
             this.ckbUseBarcode.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckbUseBarcode.Location = new System.Drawing.Point(217, 293);
+            this.ckbUseBarcode.Location = new System.Drawing.Point(217, 341);
             this.ckbUseBarcode.Name = "ckbUseBarcode";
             this.ckbUseBarcode.Size = new System.Drawing.Size(109, 17);
             this.ckbUseBarcode.TabIndex = 13;
@@ -152,7 +153,7 @@
             this.btnSaveChanged.ForeColor = System.Drawing.Color.White;
             this.btnSaveChanged.Image = global::Line_Production.Properties.Resources.Save;
             this.btnSaveChanged.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSaveChanged.Location = new System.Drawing.Point(208, 333);
+            this.btnSaveChanged.Location = new System.Drawing.Point(208, 375);
             this.btnSaveChanged.Name = "btnSaveChanged";
             this.btnSaveChanged.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnSaveChanged.Size = new System.Drawing.Size(118, 30);
@@ -171,24 +172,30 @@
             this.label5.TabIndex = 8;
             this.label5.Text = "Cảnh báo SL bất thường";
             // 
-            // cbUseMacbox
+            // txbNumberInModel
             // 
-            this.cbUseMacbox.AutoSize = true;
-            this.cbUseMacbox.Checked = true;
-            this.cbUseMacbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbUseMacbox.Location = new System.Drawing.Point(88, 293);
-            this.cbUseMacbox.Name = "cbUseMacbox";
-            this.cbUseMacbox.Size = new System.Drawing.Size(110, 17);
-            this.cbUseMacbox.TabIndex = 26;
-            this.cbUseMacbox.Text = "Sử dụng Mac box";
-            this.cbUseMacbox.UseVisualStyleBackColor = true;
+            this.txbNumberInModel.Location = new System.Drawing.Point(154, 291);
+            this.txbNumberInModel.Name = "txbNumberInModel";
+            this.txbNumberInModel.Size = new System.Drawing.Size(172, 20);
+            this.txbNumberInModel.TabIndex = 27;
+            this.txbNumberInModel.Text = "0";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(25, 294);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(112, 13);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "Số lượng mạch/Model";
             // 
             // AddModelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 385);
-            this.Controls.Add(this.cbUseMacbox);
+            this.ClientSize = new System.Drawing.Size(383, 424);
+            this.Controls.Add(this.txbNumberInModel);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.btnSaveChanged);
             this.Controls.Add(this.ckbUseBarcode);
             this.Controls.Add(this.txbRegex);
@@ -227,6 +234,7 @@
         private System.Windows.Forms.CheckBox ckbUseBarcode;
         private System.Windows.Forms.Button btnSaveChanged;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.CheckBox cbUseMacbox;
+        private System.Windows.Forms.TextBox txbNumberInModel;
+        private System.Windows.Forms.Label label7;
     }
 }

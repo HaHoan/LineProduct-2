@@ -17,7 +17,7 @@ namespace Line_Production.Database
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("insert into " + TABLE + "(Model,PersonPerLine,CycleTime,WarnQuantity,MinQuantity,CharModel,UseBarcode,UseMacbox) values(@Model, @PersonPerLine, @CycleTime, @WarnQuantity, @MinQuantity, @CharModel,@UseBarcode,@UseMacbox); SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("insert into " + TABLE + "(Model,PersonPerLine,CycleTime,WarnQuantity,MinQuantity,CharModel,UseBarcode,NumberInModel) values(@Model, @PersonPerLine, @CycleTime, @WarnQuantity, @MinQuantity, @CharModel,@UseBarcode,@NumberInModel); SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                 {
                     cmd.Parameters.AddWithValue("@Model", (o as Model).ModelID);
                     cmd.Parameters.AddWithValue("@PersonPerLine", (o as Model).PersonInLine);
@@ -26,7 +26,7 @@ namespace Line_Production.Database
                     cmd.Parameters.AddWithValue("@MinQuantity", (o as Model).MinQuantity);
                     cmd.Parameters.AddWithValue("@CharModel", (o as Model).CharModel);
                     cmd.Parameters.AddWithValue("@UseBarcode", (o as Model).UseBarcode);
-                    cmd.Parameters.AddWithValue("@UseMacbox", (o as Model).UseMacbox);
+                    cmd.Parameters.AddWithValue("@NumberInModel", (o as Model).NumberInModel);
 
                     (o as Model).Id = (int)cmd.ExecuteScalar();
                     return o;
@@ -43,7 +43,7 @@ namespace Line_Production.Database
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("update " + TABLE + " set Model = @Model, PersonPerLine = @PersonPerLine, CycleTime = @CycleTime, WarnQuantity = @WarnQuantity, MinQuantity = @MinQuantity, CharModel = @CharModel,UseBarcode = @UseBarcode,UseMacbox = @UseMacbox  where Id = '" + o.Id + "'", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("update " + TABLE + " set Model = @Model, PersonPerLine = @PersonPerLine, CycleTime = @CycleTime, WarnQuantity = @WarnQuantity, MinQuantity = @MinQuantity, CharModel = @CharModel,UseBarcode = @UseBarcode,NumberInModel = @NumberInModel  where Id = '" + o.Id + "'", DataProvider.Instance.DB))
                 {
                     cmd.Parameters.AddWithValue("@Model", (o as Model).ModelID);
                     cmd.Parameters.AddWithValue("@PersonPerLine", (o as Model).PersonInLine);
@@ -52,7 +52,7 @@ namespace Line_Production.Database
                     cmd.Parameters.AddWithValue("@MinQuantity", (o as Model).MinQuantity);
                     cmd.Parameters.AddWithValue("@CharModel", (o as Model).CharModel);
                     cmd.Parameters.AddWithValue("@UseBarcode", (o as Model).UseBarcode);
-                    cmd.Parameters.AddWithValue("@UseMacbox", (o as Model).UseMacbox);
+                    cmd.Parameters.AddWithValue("@NumberInModel", (o as Model).NumberInModel);
 
                     (o as Model).Id = (int)cmd.ExecuteScalar();
                 }
@@ -83,7 +83,7 @@ namespace Line_Production.Database
                             model.ModelID = reader[reader.GetOrdinal(ModelString.ModelID)] as string;
                             model.Cycle = reader.GetDouble(reader.GetOrdinal(ModelString.CycleTime));
                             model.UseBarcode = reader.GetInt32(reader.GetOrdinal(ModelString.UseBarcode)) == 1 ? true : false;
-                            model.UseMacbox =reader.IsDBNull(reader.GetOrdinal(ModelString.UseMacbox)) ? false : reader.GetInt32(reader.GetOrdinal(ModelString.UseMacbox)) == 1 ? true : false;
+                            model.NumberInModel = reader.GetInt32(reader.GetOrdinal(ModelString.NumberInModel));
                             model.WarnQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.WarnQuantity));
                             model.MinQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.MinQuantity));
                             model.CharModel = reader[reader.GetOrdinal(ModelString.CharModel)] as string;
@@ -121,7 +121,7 @@ namespace Line_Production.Database
                             model.ModelID = reader[reader.GetOrdinal(ModelString.ModelID)] as string;
                             model.Cycle = reader.GetDouble(reader.GetOrdinal(ModelString.CycleTime));
                             model.UseBarcode = reader.GetInt32(reader.GetOrdinal(ModelString.UseBarcode)) == 1 ? true : false;
-                            model.UseMacbox = reader.GetInt32(reader.GetOrdinal(ModelString.UseMacbox)) == 1 ? true : false;
+                            model.NumberInModel = reader.GetInt32(reader.GetOrdinal(ModelString.NumberInModel));
                             model.WarnQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.WarnQuantity));
                             model.MinQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.MinQuantity));
                             model.CharModel = reader[reader.GetOrdinal(ModelString.CharModel)] as string;

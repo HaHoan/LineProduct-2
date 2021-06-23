@@ -77,6 +77,21 @@ namespace Line_Production.Database
                 return 0;
             }
         }
+        public int SoLuongBanMachDaDem(string Model)
+        {
+            try
+            {
+                string sql = "select count(BoxID) from " + TABLE + " where ProductionID = '" + Model +"'";
+                SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
+                int count = Convert.ToInt32(command.ExecuteScalar());
+                return count;
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message.ToString());
+                return 0;
+            }
+        }
 
         public int SoLuongThungDaDem(string Model)
         {

@@ -38,7 +38,8 @@ namespace Line_Production
                     MinQuantity = float.Parse(txbMnQuantity.Text.ToString()),
                     CharModel = txbRegex.Text.ToString().Trim(),
                     UseBarcode = ckbUseBarcode.Checked,
-                    UseMacbox = cbUseMacbox.Checked
+                    NumberInModel = int.Parse(txbNumberInModel.Text.Trim())
+                 
                 };
                 if(model.Id == 0)
                 {
@@ -75,7 +76,7 @@ namespace Line_Production
                 txbMnQuantity.Text = model.MinQuantity.ToString();
                 txbRegex.Text = model.CharModel;
                 ckbUseBarcode.Checked = model.UseBarcode;
-                cbUseMacbox.Checked = model.UseMacbox;
+                txbNumberInModel.Text = model.NumberInModel.ToString();
             }
             else
             {
