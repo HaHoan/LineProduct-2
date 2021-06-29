@@ -17,7 +17,7 @@ namespace Line_Production.Database
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("insert into " + TABLE + "(ProductionID,BoxID,BoardNo,UpdateTime,Status,Updator_Code,Updator_Name) values(@ProductionID,@BoxID,@BoardNo,@UpdateTime,@Status,@Updator_Code,@Updator_Name);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
+                using (SqlCommand cmd = new SqlCommand("insert into " + TABLE + "(ProductionID,BoxID,BoardNo,UpdateTime,Status,Updator_Code,Updator_Name,Line) values(@ProductionID,@BoxID,@BoardNo,@UpdateTime,@Status,@Updator_Code,@Updator_Name,@Line);SELECT CAST(scope_identity() AS int)", DataProvider.Instance.DB))
                 {
 
                     cmd.Parameters.AddWithValue("@ProductionID", (o as HondaLock).ProductionID);
@@ -27,6 +27,7 @@ namespace Line_Production.Database
                     cmd.Parameters.AddWithValue("@Status", (o as HondaLock).Status ?? "");
                     cmd.Parameters.AddWithValue("@Updator_Code", (o as HondaLock).Update_Code ?? "");
                     cmd.Parameters.AddWithValue("@Updator_Name", (o as HondaLock).Update_Name ?? "");
+                    cmd.Parameters.AddWithValue("@Line", (o as HondaLock).Line ?? "");
                     (o as HondaLock).ID = (int)cmd.ExecuteScalar();
                     return o;
                 }
@@ -81,7 +82,7 @@ namespace Line_Production.Database
         {
             try
             {
-                string sql = "select count(BoxID) from " + TABLE + " where ProductionID = '" + Model +"'";
+                string sql = "select count(BoxID) from " + TABLE + " where ProductionID = '" + Model +"' and Line = '" + Common.GetValueRegistryKey(Control.PathConfig, RegistryKeys.id) + "'" ;
                 SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
                 int count = Convert.ToInt32(command.ExecuteScalar());
                 return count;

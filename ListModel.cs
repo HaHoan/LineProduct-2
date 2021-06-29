@@ -89,8 +89,8 @@ namespace Line_Production
                 if(dgrvListModel.SelectedRows.Count > 0)
                 {
                     DataGridViewRow r = dgrvListModel.SelectedRows[0];
-                    string ModelID = r.Cells[1].Value.ToString();
-                    var addModelForm = new AddModelForm(ModelID);
+                    int ID = int.Parse(r.Cells[1].Value.ToString());
+                    var addModelForm = new AddModelForm(ID);
                     addModelForm.close = () =>
                     {
                         list = DataProvider.Instance.ModelQuantities.Select();

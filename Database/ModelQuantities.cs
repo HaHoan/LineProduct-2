@@ -140,6 +140,44 @@ namespace Line_Production.Database
                 return null;
             }
         }
+        public Model Select(int ID)
+        {
+            try
+            {
+                string sql = "select * from " + TABLE + " where ID = '" + ID + "'";
+                SqlCommand command = new SqlCommand(sql, DataProvider.Instance.DB);
+
+                using (DbDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+
+                        while (reader.Read())
+                        {
+                            Model model = new Model();
+                            model.Id = reader.GetInt32(reader.GetOrdinal(ModelString.Id));
+                            model.ModelID = reader[reader.GetOrdinal(ModelString.ModelID)] as string;
+                            model.Cycle = reader.GetDouble(reader.GetOrdinal(ModelString.CycleTime));
+                            model.UseBarcode = reader.GetInt32(reader.GetOrdinal(ModelString.UseBarcode)) == 1 ? true : false;
+                            model.NumberInModel = reader.GetInt32(reader.GetOrdinal(ModelString.NumberInModel));
+                            model.WarnQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.WarnQuantity));
+                            model.MinQuantity = reader.GetDouble(reader.GetOrdinal(ModelString.MinQuantity));
+                            model.CharModel = reader[reader.GetOrdinal(ModelString.CharModel)] as string;
+                            model.PersonInLine = reader.GetInt32(reader.GetOrdinal(ModelString.PersonPerLine));
+                            return model;
+                        }
+
+                    }
+
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message.ToString());
+                return null;
+            }
+        }
 
         public int Delete(string Model)
         {

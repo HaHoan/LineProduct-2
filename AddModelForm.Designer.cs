@@ -61,6 +61,7 @@
             this.txbModelID.Name = "txbModelID";
             this.txbModelID.Size = new System.Drawing.Size(172, 20);
             this.txbModelID.TabIndex = 1;
+            this.txbModelID.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txbModelID_PreviewKeyDown);
             // 
             // txbPersonInLine
             // 

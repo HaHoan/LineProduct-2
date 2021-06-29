@@ -15,13 +15,12 @@ namespace Line_Production
     public partial class AddModelForm : Form
     {
         public Action close;
-        private string ModelID;
         private int ID;
-        public AddModelForm(string ModelID = null)
+        public AddModelForm(int ID = 0)
         {
             InitializeComponent();
-            this.ModelID = ModelID;
-            
+            this.ID = ID;
+
         }
 
         private void btnSaveChanged_Click(object sender, EventArgs e)
@@ -39,12 +38,19 @@ namespace Line_Production
                     CharModel = txbRegex.Text.ToString().Trim(),
                     UseBarcode = ckbUseBarcode.Checked,
                     NumberInModel = int.Parse(txbNumberInModel.Text.Trim())
-                 
+
                 };
-                if(model.Id == 0)
+                if (model.Id == 0)
                 {
-                    DataProvider.Instance.ModelQuantities.Insert(model);
-                }else
+                    var modelInDb = DataProvider.Instance.ModelQuantities.Select(model.ModelID);
+                    if (modelInDb != null)
+                    {
+                        DataProvider.Instance.ModelQuantities.Update(model);
+                    }
+                    else
+                        DataProvider.Instance.ModelQuantities.Insert(model);
+                }
+                else
                 {
                     DataProvider.Instance.ModelQuantities.Update(model);
                 }
@@ -54,19 +60,19 @@ namespace Line_Production
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message.ToString());
-                
+
             }
-            
+
         }
 
         private void AddModelForm_Shown(object sender, EventArgs e)
         {
-            if(ModelID == null)
+            if (ID == 0)
             {
                 return;
             }
-            Model model = DataProvider.Instance.ModelQuantities.Select(ModelID);
-            if(model != null)
+            Model model = DataProvider.Instance.ModelQuantities.Select(ID);
+            if (model != null)
             {
                 ID = model.Id;
                 txbModelID.Text = model.ModelID;
@@ -82,7 +88,32 @@ namespace Line_Production
             {
                 MessageBox.Show("Không tìm thấy model này");
             }
-             
+
+
+        }
+
+        private void txbModelID_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string modelID = txbModelID.Text.Trim();
+                if (ID == 0)
+                {
+                    var model = DataProvider.Instance.ModelQuantities.Select(modelID);
+                    if (model != null)
+                    {
+                        ID = model.Id;
+                        txbModelID.Text = model.ModelID;
+                        txbPersonInLine.Text = model.PersonInLine.ToString();
+                        txbCycle.Text = model.Cycle.ToString();
+                        txbWarmQuatity.Text = model.WarnQuantity.ToString();
+                        txbMnQuantity.Text = model.MinQuantity.ToString();
+                        txbRegex.Text = model.CharModel;
+                        ckbUseBarcode.Checked = model.UseBarcode;
+                        txbNumberInModel.Text = model.NumberInModel.ToString();
+                    }
+                }
+            }
 
         }
     }

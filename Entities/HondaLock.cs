@@ -16,6 +16,7 @@ namespace Line_Production.Entities
         public string Status { get; set; }
         public string Update_Code { get; set; }
         public string Update_Name { get; set; }
+        public string Line { get; set; }
 
     }
 }

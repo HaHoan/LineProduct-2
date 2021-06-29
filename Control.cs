@@ -850,7 +850,8 @@ namespace Line_Production
                     UpdateTime = pvsservice.GetDateTime(),
                     Status = chkOK.Checked ? "1" : "0",
                     Update_Code = lblCode.Text,
-                    Update_Name = lUser.Text
+                    Update_Name = lUser.Text,
+                    Line = Common.GetValueRegistryKey(Control.PathConfig, RegistryKeys.id)
                 });
 
                 ChuaTonTai();
@@ -1130,7 +1131,6 @@ namespace Line_Production
                                 }
                                 else
                                 {
-
                                     Common.ActiveProcess(nameSoft);
                                     Console.Write(nameSoft);
                                     Clipboard.SetText(txtSerial.Text.Trim());
@@ -1140,23 +1140,23 @@ namespace Line_Production
                                     Thread.Sleep(170);
                                     Common.ActiveProcess(this.Text);
                                     Thread.Sleep(220);
-                                    bool IsWipSuccess = false;
-                                    for (int i = 0; i < 10; i++)
-                                    {
-                                        if (pvsservice.GetWorkOrderItem(txtSerial.Text.Trim(), STATION) != null)
-                                        {
-                                            IsWipSuccess = true;
-                                            break;
-                                        }
-                                        Thread.Sleep(100);
-                                    }
-                                    //SendKeys.SendWait("%{TAB}");
-                                    if (!IsWipSuccess)
+                                    //bool IsWipSuccess = false;
+                                    //for (int i = 0; i < 10; i++)
+                                    //{
+                                    //    if (pvsservice.GetWorkOrderItem(txtSerial.Text.Trim(), STATION) != null)
+                                    //    {
+                                    //        IsWipSuccess = true;
+                                    //        break;
+                                    //    }
+                                    //    Thread.Sleep(100);
+                                    //}
+                                    if (pvsservice.GetWorkOrderItem(txtSerial.Text.Trim(), STATION) == null)
                                     {
                                         txtSerial.SelectAll();
                                         txtSerial.Focus();
                                         return;
                                     }
+                                    
 
                                     KiemTraTrenHondaLock(() =>
                                     {
