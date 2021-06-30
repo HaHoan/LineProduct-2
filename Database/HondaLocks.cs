@@ -29,6 +29,7 @@ namespace Line_Production.Database
                     cmd.Parameters.AddWithValue("@Updator_Name", (o as HondaLock).Update_Name ?? "");
                     cmd.Parameters.AddWithValue("@Line", (o as HondaLock).Line ?? "");
                     (o as HondaLock).ID = (int)cmd.ExecuteScalar();
+
                     return o;
                 }
 
